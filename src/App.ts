@@ -15,7 +15,7 @@ class App extends Application {
 
     public constructor() {
         super({
-            backgroundColor: 0xffffff,
+            backgroundColor: 0x73a01c,
             powerPreference: 'high-performance',
             antialias: true,
             resolution: Math.max(window.devicePixelRatio || 1, 2),
