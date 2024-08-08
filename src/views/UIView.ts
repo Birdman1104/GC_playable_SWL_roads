@@ -1,9 +1,11 @@
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { getUIGridConfig } from '../configs/gridConfigs/UIViewGC';
+import { BottomBar } from './BottomBar';
 import { TopBar } from './TopBar';
 
 export class UIView extends PixiGrid {
     private topBar: TopBar;
+    private bottomBar: BottomBar;
 
     constructor() {
         super();
@@ -21,10 +23,16 @@ export class UIView extends PixiGrid {
 
     private build(): void {
         this.buildTopBar();
+        this.buildBottomBar();
     }
 
     private buildTopBar(): void {
         this.topBar = new TopBar();
         this.setChild('topBar', this.topBar);
+    }
+
+    private buildBottomBar(): void {
+        this.bottomBar = new BottomBar();
+        this.setChild('bottomBar', this.bottomBar);
     }
 }

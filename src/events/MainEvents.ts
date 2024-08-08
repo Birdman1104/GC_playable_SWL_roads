@@ -22,3 +22,10 @@ export const TakeMe = {
 export const KeyboardEvents = {
     KeyClicked: 'KeyboardEventsKeyClicked',
 };
+
+export const BottomBarEvents = {
+    BuyFoodClicked: 'BottomBarEventsBuyFoodClicked',
+    BuyJoyClicked: 'BottomBarEventsBuyJoyClicked',
+    BuyHealthClicked: 'BottomBarEventsBuyHealthClicked',
+    BuyHouseClicked: 'BottomBarEventsBuyHouseClicked',
+};
