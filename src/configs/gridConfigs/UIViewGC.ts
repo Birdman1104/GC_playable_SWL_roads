@@ -8,9 +8,20 @@ const getUIGridLandscapeConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
     return {
         name: 'ui',
-        // debug: { color: 0xd950ff },
+        debug: { color: 0xd950ff },
         bounds,
-        cells: [],
+        cells: [
+            {
+                name: 'bottomBar',
+                // scale: CellScale.showAll,
+                bounds: { x: 0, y: 0.79, width: 1, height: 0.1 },
+            },
+            {
+                name: 'topBar',
+                // scale: CellScale.showAll,
+                bounds: { x: 0.1, y: 0.01, width: 0.8, height: 0.2 },
+            },
+        ],
     };
 };
 
@@ -18,8 +29,19 @@ const getUIGridPortraitConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
     return {
         name: 'ui',
-        // debug: { color: 0xd950ff },
+        debug: { color: 0xd950ff },
         bounds,
-        cells: [],
+        cells: [
+            {
+                name: 'bottomBar',
+                // scale: CellScale.showAll,
+                bounds: { x: 0, y: 0.74, width: 1, height: 0.25 },
+            },
+            {
+                name: 'topBar',
+                // scale: CellScale.showAll,
+                bounds: { x: 0.1, y: 0.01, width: 0.8, height: 0.2 },
+            },
+        ],
     };
 };

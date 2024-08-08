@@ -11,6 +11,8 @@ const BOUNDS = {
 };
 export class BoardView extends Container {
     private bkg: Sprite;
+    private road: Sprite;
+
     constructor() {
         super();
 
@@ -33,17 +35,25 @@ export class BoardView extends Container {
     }
 
     private build(): void {
-        this.buildBkg('game/bkg');
+        this.buildBkg();
+        this.buildRoad();
     }
 
     private onGameStateUpdate(state: GameState): void {
         //
     }
 
-    private buildBkg(texture: string): void {
+    private buildBkg(): void {
         this.bkg?.destroy();
 
-        this.bkg = makeSprite({ texture: Images[texture] });
+        this.bkg = makeSprite({ texture: Images['game/bkg'] });
         this.addChild(this.bkg);
+    }
+
+    private buildRoad(): void {
+        this.road?.destroy();
+
+        this.road = makeSprite({ texture: Images['game/road'] });
+        this.addChild(this.road);
     }
 }
