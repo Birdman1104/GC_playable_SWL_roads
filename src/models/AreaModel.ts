@@ -13,22 +13,25 @@ export enum AreaType {
 }
 
 export class AreaModel extends ObservableModel {
-    private _locationID: string;
     private _building: BuildingType;
-    private _areaType: AreaType;
+    private _type: AreaType;
 
-    constructor(private config: { locationID: string; areaType: AreaType; building?: BuildingType }) {
+    constructor(private config: AreaConfig) {
         super('AreaModel');
 
         this.makeObservable();
     }
 
-    public get locationID(): string {
-        return this._locationID;
+    public get x(): number {
+        return this.config.x;
     }
 
-    public get areaType(): AreaType {
-        return this._areaType;
+    public get y(): number {
+        return this.config.y;
+    }
+
+    public get type(): AreaType {
+        return this._type;
     }
 
     public get building(): BuildingType {
@@ -40,9 +43,8 @@ export class AreaModel extends ObservableModel {
     }
 
     public initialize(): void {
-        this._locationID = this.config.locationID;
         this.config.building && (this.building = this.config.building);
-        this._areaType = this.config.areaType;
+        this._type = this.config.type;
     }
 
     public addBuilding(building: BuildingType): void {

@@ -39,11 +39,11 @@ export class GameView extends PixiGrid {
     }
 
     private onBoardUpdate(board: BoardModel | null): void {
-        board ? this.buildBoard() : this.destroyBoard();
+        board ? this.buildBoard(board) : this.destroyBoard();
     }
 
-    private buildBoard() {
-        this.board = new BoardView();
+    private buildBoard(board: BoardModel): void {
+        this.board = new BoardView(board);
         this.setChild('board', this.board);
     }
 

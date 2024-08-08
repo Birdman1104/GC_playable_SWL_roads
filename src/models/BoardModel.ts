@@ -1,3 +1,4 @@
+import { AREAS } from '../configs/AreasConfig';
 import { AreaModel, BuildingType } from './AreaModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -35,6 +36,10 @@ export class BoardModel extends ObservableModel {
         return this._areas;
     }
 
+    public set areas(value: AreaModel[]) {
+        this._areas = value;
+    }
+
     public addCoins(value: number): void {
         this._coins += value;
     }
@@ -67,13 +72,17 @@ export class BoardModel extends ObservableModel {
         this._joy -= value;
     }
 
-    public addBuilding(locationID: string, building: BuildingType): void {
-        const area = this.areas.find((area) => area.locationID === locationID);
+    public addBuilding(uuid: string, building: BuildingType): void {
+        const area = this.areas.find((area) => area.uuid === uuid);
         if (!area) return;
         area.addBuilding(building);
     }
 
     public initialize(): void {
-        //
+        this.areas = AREAS.map((area) => {
+            const areaModel = new AreaModel(area);
+            areaModel.initialize();
+            return areaModel;
+        })
     }
 }

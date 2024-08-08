@@ -28,7 +28,9 @@ type SpriteConfig = {
     position?: PIXI.Point;
 };
 
-type CardConfig = {
-    question: string;
-    answers: string[];
+type AreaConfig = {
+    x: number;
+    y: number;
+    type: AreaType;
+    building?: BuildingType;
 };
