@@ -5,6 +5,8 @@ export enum BuildingType {
     Park = 'park',
     Hospital = 'hospital',
     Food = 'food',
+    FortuneWheel = 'fortune_wheel',
+    WinterFountain = 'winter_fountain',
 }
 
 export enum AreaType {
