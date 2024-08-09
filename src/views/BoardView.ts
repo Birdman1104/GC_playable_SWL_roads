@@ -1,11 +1,12 @@
 import { lego } from '@armathai/lego';
 import { Container, Rectangle, Sprite } from 'pixi.js';
 import { Images } from '../assets';
+import { BoardEvents } from '../events/MainEvents';
 import { AreaModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { AreaModel, BuildingType } from '../models/AreaModel';
 import { BoardModel } from '../models/BoardModel';
 import { GameState } from '../models/GameModel';
-import { isSquareLikeScreen, lp, makeSprite } from '../utils';
+import { delayRunnable, isSquareLikeScreen, lp, makeSprite } from '../utils';
 import { Area } from './Area';
 
 const BOUNDS = {
@@ -33,12 +34,12 @@ export class BoardView extends Container {
     }
 
     public getBuildingByUuid(uuid: string): Area | undefined {
-        return this.areas.find(area => area.uuid === uuid)
+        return this.areas.find((area) => area.uuid === uuid);
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: PIXI.Rectangle | undefined): PIXI.Rectangle {
         const bounds = isSquareLikeScreen() ? BOUNDS.isPortraitSquare : lp(BOUNDS.landscape, BOUNDS.portrait);
-        const { x, y, width, height } = bounds
+        const { x, y, width, height } = bounds;
         return new Rectangle(x, y, width, height);
     }
 
@@ -53,9 +54,12 @@ export class BoardView extends Container {
     private onAreasUpdate(areas: AreaModel[]): void {
         this.areas = areas.map((a) => {
             const area = new Area(a);
+            area.on('animationComplete', () => {
+                delayRunnable(0.3, () => lego.event.emit(BoardEvents.HouseAnimationComplete));
+            });
             area.position.set(a.x, a.y);
             this.addChild(area);
-            return area
+            return area;
         });
     }
 
@@ -64,18 +68,17 @@ export class BoardView extends Container {
     }
 
     private onAreaBuildingUpdate(newBuilding: BuildingType, oldBuilding: BuildingType, uuid): void {
-        const area = this.getBuildingByUuid(uuid)
-        if(!area) return
+        const area = this.getBuildingByUuid(uuid);
+        if (!area) return;
 
-        area.addBuilding(newBuilding)
+        area.addBuilding(newBuilding);
     }
 
     private buildBkg(): void {
         this.bkg?.destroy();
 
         this.bkg = makeSprite({ texture: Images['game/bkg'] });
-        this.bkg.y = 28
+        this.bkg.y = 28;
         this.addChild(this.bkg);
     }
-
 }

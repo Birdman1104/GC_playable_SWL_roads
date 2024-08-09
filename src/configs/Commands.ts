@@ -185,14 +185,16 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
                 .payload(price)
                 .guard(boardModelStateFirstSceneGuard)
                 .execute(buyHouseCommand)
+                
+                .guard(boardModelStateFirstSceneGuard)
+                .execute(disableAllButtonsCommand)
 
                 .payload(price)
                 .guard(boardModelStateGameGuard)
                 .execute(buyHouseCommand)
 
                 .guard(boardModelStateFirstSceneGuard)
-                .payload(BoardState.SecondScene)
-                .execute(setBoardStateCommand);
+                .execute(disableAllButtonsCommand)
             break;
         case ButtonType.Joy:
             lego.command
@@ -213,6 +215,14 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
             break;
     }
 };
+
+export const onHouseAnimationCompleteCommand = (): void => {
+    lego.command
+        //
+        .guard(boardModelStateFirstSceneGuard)
+        .payload(BoardState.SecondScene)
+        .execute(setBoardStateCommand);
+}
 
 export const onBoardStateUpdateCommand = (state: BoardState): void => {
     switch (state) {
@@ -248,6 +258,10 @@ const startMoneyGeneratorLoopCommand = (): void => {
 
 const disableNonHouseButtonsCommand = (): void => {
     Head.gameModel?.board?.disableNonHouseButtons();
+};
+
+const disableAllButtonsCommand = (): void => {
+    Head.gameModel?.board?.disableAllButtons();
 };
 
 const enableNonHouseButtonsCommand = (): void => {

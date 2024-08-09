@@ -108,7 +108,7 @@ export const shuffle = (arr: any[]): void => {
     }
 };
 
-export const tweenToCell = (grid, child, cellName, cb: any = null, duration = 200, easing = 'easeInOutSine'): void => {
+export const tweenToCell = (grid, child, cellName, cb: any = null, duration = 300, easing = 'easeInOutSine'): void => {
     const { x: fromScaleX, y: fromScaleY } = child.scale;
     const { x: fromPositionX, y: fromPositionY } = child.position;
     grid.rebuildChild(child, cellName);

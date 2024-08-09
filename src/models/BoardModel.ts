@@ -84,21 +84,19 @@ export class BoardModel extends ObservableModel {
     }
 
     public disableNonHouseButtons(): void {
-        this.buttons.forEach((b) => {
-            b.isActive = b.type === ButtonType.House;
-        });
+        this.buttons.forEach((b) => (b.isActive = b.type === ButtonType.House));
+    }
+
+    public disableAllButtons(): void {
+        this.buttons.forEach((b) => (b.isActive = false));
     }
 
     public enableNonHouseButtons(): void {
-        this.buttons.forEach((b) => {
-            b.isActive = b.type !== ButtonType.House;
-        });
+        this.buttons.forEach((b) => (b.isActive = b.type !== ButtonType.House));
     }
 
     public enableAllButtons(): void {
-        this.buttons.forEach((b) => {
-            b.isActive = true;
-        });
+        this.buttons.forEach((b) => (b.isActive = true));
     }
 
     public addCoins(value: number): void {
@@ -146,9 +144,7 @@ export class BoardModel extends ObservableModel {
 
     public startMoneyGenerationLoop(): void {
         if (this.state !== BoardState.Game) return;
-        delayRunnable(1, () => {
-            this.collectCoins();
-        });
+        delayRunnable(1, () => this.collectCoins());
     }
 
     public initialize(): void {

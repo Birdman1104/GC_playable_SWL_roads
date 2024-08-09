@@ -39,9 +39,12 @@ export class Area extends Container {
                     y: 1,
                     duration: 200,
                     easing: 'easeInOutSine',
+                    complete: () => {
+                        buildingType === BuildingType.House && this.emit('animationComplete');
+                    },
                 });
-            }
-        })
+            },
+        });
         this.addChild(this.building);
     }
 

@@ -6,7 +6,6 @@ import { makeSprite } from '../utils';
 export class ProgressBar extends Container {
     private icon: Sprite;
     private progressBkg: Sprite;
-    private progressBar: Sprite;
 
     constructor(private _type: BarType) {
         super();
@@ -23,10 +22,8 @@ export class ProgressBar extends Container {
         this.icon = makeSprite({ texture: this.getIconTexture() });
         this.icon.x = -50;
 
-        this.progressBar = makeSprite({ texture: Images['game/progress_bar'] });
-        this.progressBar.position.set(18, -5);
 
-        this.addChild(this.progressBkg, this.progressBar, this.icon);
+        this.addChild(this.progressBkg, this.icon);
     }
 
     private getIconTexture(): string {

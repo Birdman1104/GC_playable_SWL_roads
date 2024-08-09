@@ -146,14 +146,15 @@ export class ForegroundView extends PixiGrid {
             complete: () => callIfExists(cb)
         })
     }
-
-    private hideBlocker(): void {
+    
+    private hideBlocker(cb?): void {
         this.blocker.interactive = false;
         anime({
             targets: this.blocker,
             alpha: 0,
             duration: 100,
-            easing: 'easeInOutSine'
+            easing: 'easeInOutSine',
+            complete: () => callIfExists(cb)
         })
     }
 }

@@ -1,11 +1,12 @@
 import { lego } from '@armathai/lego';
-import { BottomBarEvents, MainGameEvents, TakeMe } from '../events/MainEvents';
+import { BoardEvents, BottomBarEvents, MainGameEvents, TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
     onBoardStateUpdateCommand,
     onBuyButtonClickedCommand,
     onGameStateUpdateCommand,
+    onHouseAnimationCompleteCommand,
     onMainViewReadyCommand,
     resizeCommand,
     takeToStoreCommand
@@ -51,5 +52,9 @@ const eventCommandPairs = Object.freeze([
     {
         event: BoardModelEvents.StateUpdate,
         command: onBoardStateUpdateCommand,
+    },
+    {
+        event: BoardEvents.HouseAnimationComplete,
+        command: onHouseAnimationCompleteCommand,
     },
 ]);

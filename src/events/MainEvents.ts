@@ -9,20 +9,17 @@ export const MainGameEvents = {
 };
 
 export const BoardEvents = {
-    CardClick: 'BoardEventsCardClick',
-    RightAnimationComplete: 'BoardEventsRightAnimationComplete',
-    WrongAnimationComplete: 'BoardEventsWrongAnimationComplete',
-    CardCompleteAnimationComplete: 'BoardEventsCardCompleteAnimationComplete',
+    HouseAnimationComplete: 'BoardEventsHouseAnimationComplete',
 };
 
 export const TakeMe = {
     ToStore: 'TakeMeToStore',
 };
 
-export const KeyboardEvents = {
-    KeyClicked: 'KeyboardEventsKeyClicked',
-};
-
 export const BottomBarEvents = {
     ButtonClicked: 'BottomBarEventsButtonClicked',
+};
+
+export const ForegroundViewEvents = {
+    FirstAnimationComplete: 'ForegroundViewEventsFirstAnimationComplete',
 };
