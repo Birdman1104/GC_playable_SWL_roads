@@ -10,6 +10,9 @@ export const AreaModelEvents = { BuildingUpdate: 'AreaModelBuildingUpdate' };
 export const BoardModelEvents = {
     StateUpdate: 'BoardModelStateUpdate',
     CoinsUpdate: 'BoardModelCoinsUpdate',
+    HealthUpdate: 'BoardModelHealthUpdate',
+    FoodUpdate: 'BoardModelFoodUpdate',
+    JoyUpdate: 'BoardModelJoyUpdate',
     AreasUpdate: 'BoardModelAreasUpdate',
     ButtonsUpdate: 'BoardModelButtonsUpdate',
 };

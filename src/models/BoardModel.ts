@@ -15,9 +15,9 @@ export enum BoardState {
 }
 export class BoardModel extends ObservableModel {
     private _coins = 1000;
-    private _health = 10;
-    private _food = 10;
-    private _joy = 10;
+    private _health: number;
+    private _food: number;
+    private _joy: number;
     private _buttons: ButtonModel[] = [];
     private _state: BoardState;
 
@@ -55,6 +55,18 @@ export class BoardModel extends ObservableModel {
 
     public get joy(): number {
         return this._joy;
+    }
+
+    public set health(value: number) {
+        this._health = value;
+    }
+
+    public set food(value: number) {
+        this._food = value;
+    }
+
+    public set joy(value: number) {
+        this._joy = value;
     }
 
     public get areas(): AreaModel[] {
@@ -159,6 +171,11 @@ export class BoardModel extends ObservableModel {
             buttonModel.initialize();
             return buttonModel;
         });
+
+        this._health = 5;
+        this._food = 2;
+        this._joy = 3;
+
         this.state = BoardState.FirstScene;
     }
 
