@@ -1,15 +1,22 @@
 import { AREAS } from '../configs/AreasConfig';
 import { BUTTONS_CONFIG } from '../configs/ButtonsConfig';
+import { HOUSE_COINS_PER_SECOND } from '../configs/constants';
+import { delayRunnable } from '../utils';
 import { AreaModel, AreaType, BuildingType } from './AreaModel';
 import { ButtonModel } from './ButtonModel';
 import { ObservableModel } from './ObservableModel';
 
+export enum BoardState {
+    Game = 'game',
+    NotGame = 'not_game',
+}
 export class BoardModel extends ObservableModel {
     private _coins = 1000;
     private _health = 10;
     private _food = 10;
     private _joy = 10;
     private _buttons: ButtonModel[] = [];
+    private _state: BoardState;
 
     private _areas: AreaModel[] = [];
 
@@ -17,6 +24,14 @@ export class BoardModel extends ObservableModel {
         super('BoardModel');
 
         this.makeObservable();
+    }
+
+    public get state(): BoardState {
+        return this._state;
+    }
+
+    public set state(value: BoardState) {
+        this._state = value;
     }
 
     public get coins(): number {
@@ -61,6 +76,11 @@ export class BoardModel extends ObservableModel {
         return freeAreas.length === 0 ? undefined : freeAreas[rnd];
     }
 
+    public addCoins(value: number): void {
+        this._coins += value;
+        this.checkButtonsActive();
+    }
+
     public addHealth(value: number): void {
         this._health += value;
     }
@@ -76,11 +96,7 @@ export class BoardModel extends ObservableModel {
     public decreaseCoins(value: number): void {
         this._coins -= value;
 
-        this.buttons.forEach((b) => {
-            if (b.price > this._coins) {
-                b.isActive = false;
-            }
-        });
+        this.checkButtonsActive()
     }
 
     public decreaseHealth(value: number): void {
@@ -101,6 +117,22 @@ export class BoardModel extends ObservableModel {
         area.addBuilding(building);
     }
 
+    public startMoneyGenerationLoop(): void {
+        if (this.state !== BoardState.Game) return;
+        delayRunnable(1, () => {
+            this.collectCoins();
+        });
+    }
+
+    private collectCoins(): void {
+        const housesCount = this.areas.filter((a) => a.building === BuildingType.House).length;
+        if (!housesCount) return;
+
+        this.addCoins(housesCount * HOUSE_COINS_PER_SECOND);
+
+        this.startMoneyGenerationLoop();
+    }
+
     public initialize(): void {
         this.areas = AREAS.map((area) => {
             const areaModel = new AreaModel(area);
@@ -112,6 +144,14 @@ export class BoardModel extends ObservableModel {
             const buttonModel = new ButtonModel(c);
             buttonModel.initialize();
             return buttonModel;
+        });
+        this.state = BoardState.Game;
+        this.startMoneyGenerationLoop();
+    }
+
+    private checkButtonsActive(): void {
+        this.buttons.forEach((b) => {
+            b.isActive = b.price <= this._coins;
         });
     }
 }

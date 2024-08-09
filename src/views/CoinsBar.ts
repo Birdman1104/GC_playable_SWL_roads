@@ -1,4 +1,5 @@
 import { lego } from '@armathai/lego';
+import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { BoardModelEvents } from '../events/ModelEvents';
@@ -30,6 +31,19 @@ export class CoinsBar extends Container {
     }
 
     private onCoinsUpdate(value: number): void {
+        const scale = value < +this.coinsText.text ? 0.8 : 1.2
         this.coinsText.text = `${value}`
+        anime({
+            targets: this.coinsText.scale,
+            x: scale,
+            y: scale,
+            duration: 100,
+            easing: 'easeInOutSine',
+            direction: 'alternate',
+            loop: 1,
+            complete: () => {
+                this.coinsText.scale.set(1)
+            }
+        })
     }
 }

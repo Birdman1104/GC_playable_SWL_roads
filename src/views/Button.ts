@@ -33,6 +33,11 @@ export class Button extends Container {
         return this.config.uuid
     }
 
+    public activate(): void {
+      this._isActive = true
+      this.alpha = 1
+    }
+
     public deactivate(): void {
       this._isActive = false
       this.alpha = 0.7

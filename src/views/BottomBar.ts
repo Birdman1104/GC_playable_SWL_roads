@@ -36,6 +36,6 @@ export class BottomBar extends Container {
         const button = this.buttons.find(b=> b.uuid === uuid)
         if(!button) return
 
-        button.deactivate()
+        isActive ? button.activate() : button.deactivate()
     }
 }
