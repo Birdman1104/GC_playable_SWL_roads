@@ -11,10 +11,10 @@ import { Area } from './Area';
 const BOUNDS = {
     landscape: { x: -400, y: -450, width: 800, height: 800 },
     portrait: { x: -550, y: -400, width: 1000, height: 600 },
-  
+
     portraitSquare: { x: -550, y: -400, width: 1000, height: 700 },
     landscapeSquare: { x: -450, y: -450, width: 800, height: 900 },
-  
+
     portraitNarrow: { x: -550, y: -400, width: 1000, height: 700 },
     landscapeNarrow: { x: -400, y: -380, width: 800, height: 700 },
 };
@@ -43,19 +43,14 @@ export class BoardView extends Container {
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
         let bounds = BOUNDS.landscape;
-        if(isSquareLikeScreen()) {
-            console.warn('square', lp('landscape', 'portrait'));
-            
+        if (isSquareLikeScreen()) {
             bounds = lp(BOUNDS.landscapeSquare, BOUNDS.portraitSquare);
-        } else if(isNarrowScreen()) {
-            console.warn('narrow', lp('landscape', 'portrait'));
+        } else if (isNarrowScreen()) {
             bounds = lp(BOUNDS.landscapeNarrow, BOUNDS.portraitNarrow);
         } else {
-            console.warn('normal', lp('landscape', 'portrait'));
             bounds = lp(BOUNDS.landscape, BOUNDS.portrait);
         }
 
-        // const bounds = isSquareLikeScreen() ? BOUNDS.isPortraitSquare : lp(BOUNDS.landscape, BOUNDS.portrait);
         const { x, y, width, height } = bounds;
         return new Rectangle(x, y, width, height);
     }

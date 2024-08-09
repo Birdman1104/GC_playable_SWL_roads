@@ -135,15 +135,28 @@ export class BoardModel extends ObservableModel {
     }
 
     public decreaseHealth(value: number): void {
-        this._health -= value;
+        const newValue = this._health - value;
+        this._health = Math.max(newValue, 0);
+
+        if (newValue <= 0) {
+            this.state = BoardState.Fail;
+        }
     }
 
     public decreaseFood(value: number): void {
+        const newValue = this._food - value;
         this._food -= value;
+        if (newValue <= 0) {
+            this.state = BoardState.Fail;
+        }
     }
 
     public decreaseJoy(value: number): void {
+        const newValue = this._joy - value;
         this._joy -= value;
+        if (newValue <= 0) {
+            this.state = BoardState.Fail;
+        }
     }
 
     public addBuilding(building: BuildingType): void {

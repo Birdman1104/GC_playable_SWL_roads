@@ -4,6 +4,7 @@ import anime from 'animejs';
 import { Graphics, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
+import { TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents } from '../events/ModelEvents';
 import { AdStatus } from '../models/AdModel';
 import { BoardState } from '../models/BoardModel';
@@ -11,7 +12,7 @@ import { HintModel } from '../models/HintModel';
 import { callIfExists, delayRunnable, makeSprite, tweenToCell } from '../utils';
 import { HintView } from './HintView';
 
-
+// TODO -> 2.5 sec
 const TEXT_DISPLAY_DURATION = 1;
 
 export class ForegroundView extends PixiGrid {
@@ -19,6 +20,7 @@ export class ForegroundView extends PixiGrid {
     private blocker: Graphics;
     private buildText: Sprite;
     private provideText: Sprite;
+    private failIcon: Sprite;
 
     constructor() {
         super();
@@ -26,7 +28,7 @@ export class ForegroundView extends PixiGrid {
         lego.event
             .on(AdModelEvents.StatusUpdate, this.onStatusUpdate, this)
             .on(AdModelEvents.HintUpdate, this.onHintUpdate, this)
-            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this)
+            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
     }
 
     get viewName(): string {
@@ -57,12 +59,12 @@ export class ForegroundView extends PixiGrid {
     }
 
     private buildBuildText(): void {
-        this.buildText = makeSprite({texture: Images['game/build_a_house']})
+        this.buildText = makeSprite({ texture: Images['game/build_a_house'] });
         this.setChild('text_from', this.buildText);
     }
 
     private buildProvideText(): void {
-        this.provideText = makeSprite({texture: Images['game/provide_for_citizens']})
+        this.provideText = makeSprite({ texture: Images['game/provide_for_citizens'] });
         this.setChild('text_from', this.provideText);
     }
 
@@ -106,6 +108,9 @@ export class ForegroundView extends PixiGrid {
             case BoardState.Game:
                 this.hideBlocker();
                 break;
+            case BoardState.Fail:
+                this.showFail();
+                break;
 
             default:
                 break;
@@ -118,9 +123,9 @@ export class ForegroundView extends PixiGrid {
             delayRunnable(TEXT_DISPLAY_DURATION, () => {
                 this.hideBlocker();
                 tweenToCell(this, this.buildText, 'text_to');
-            })
-        }
-        
+            });
+        };
+
         this.showBlocker(cb);
     }
 
@@ -130,23 +135,47 @@ export class ForegroundView extends PixiGrid {
             delayRunnable(TEXT_DISPLAY_DURATION, () => {
                 this.hideBlocker();
                 tweenToCell(this, this.provideText, 'text_to');
-            })
-        }
+            });
+        };
 
         this.showBlocker(cb);
     }
 
-    private showBlocker(cb: any): void {
+    private showFail(): void {
+        delayRunnable(1.5, () => {
+            this.failIcon = makeSprite({ texture: Images['game/fail'] });
+            this.failIcon.visible = true;
+            this.setChild('text_show', this.failIcon);
+            const scale = this.failIcon.scale.x;
+            this.failIcon.scale.set(0);
+            this.showBlocker();
+
+            anime({
+                targets: this.failIcon.scale,
+                x: scale,
+                y: scale,
+                duration: 600,
+                easing: 'easeOutElastic',
+                complete: () => {
+                    delayRunnable(1, () => {
+                        lego.event.emit(TakeMe.ToStore)
+                    });
+                }
+            });
+        });
+    }
+
+    private showBlocker(cb?): void {
         this.blocker.interactive = true;
         anime({
             targets: this.blocker,
             alpha: 0.6,
             duration: 100,
             easing: 'easeInOutSine',
-            complete: () => callIfExists(cb)
-        })
+            complete: () => callIfExists(cb),
+        });
     }
-    
+
     private hideBlocker(cb?): void {
         this.blocker.interactive = false;
         anime({
@@ -154,7 +183,7 @@ export class ForegroundView extends PixiGrid {
             alpha: 0,
             duration: 100,
             easing: 'easeInOutSine',
-            complete: () => callIfExists(cb)
-        })
+            complete: () => callIfExists(cb),
+        });
     }
 }
