@@ -41,7 +41,6 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildBkg();
-        this.buildRoad();
     }
 
     private onAreasUpdate(areas: AreaModel[]): void {
@@ -60,13 +59,9 @@ export class BoardView extends Container {
         this.bkg?.destroy();
 
         this.bkg = makeSprite({ texture: Images['game/bkg'] });
+        this.bkg.y = 28
+        // this.bkg.x = 25
         this.addChild(this.bkg);
     }
 
-    private buildRoad(): void {
-        this.road?.destroy();
-
-        this.road = makeSprite({ texture: Images['game/road'] });
-        this.addChild(this.road);
-    }
 }

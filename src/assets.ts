@@ -22,7 +22,6 @@ export const assets = {
         'game/progress_bar.png': require('../assets/images/game/progress_bar.png').default,
         'game/progress_bkg.png': require('../assets/images/game/progress_bkg.png').default,
         'game/rectangle.png': require('../assets/images/game/rectangle.png').default,
-        'game/road.png': require('../assets/images/game/road.png').default,
         'game/square.png': require('../assets/images/game/square.png').default,
         'game/winter_fountain.png': require('../assets/images/game/winter_fountain.png').default,
     },
@@ -53,7 +52,6 @@ export const Images = {
     'game/progress_bar': 'game/progress_bar.png',
     'game/progress_bkg': 'game/progress_bkg.png',
     'game/rectangle': 'game/rectangle.png',
-    'game/road': 'game/road.png',
     'game/square': 'game/square.png',
     'game/winter_fountain': 'game/winter_fountain.png',
 };
