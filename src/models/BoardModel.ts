@@ -152,6 +152,28 @@ export class BoardModel extends ObservableModel {
         if (!area) return;
 
         area.addBuilding(building);
+
+        // if(this.state !== BoardState.Game) return;
+
+        switch (building) {
+            case BuildingType.House:
+                this.decreaseJoy(1);
+                this.decreaseFood(1);
+                this.decreaseHealth(1);
+                break;
+            case BuildingType.Hospital:
+                this.addHealth(2);
+                break;
+            case BuildingType.Food:
+                this.addFood(2);
+                break;
+            case BuildingType.WinterFountain:
+                this.addJoy(2);
+                break;
+        
+            default:
+                break;
+        }
     }
 
     public startMoneyGenerationLoop(): void {
