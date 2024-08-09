@@ -1,5 +1,7 @@
 import { AREAS } from '../configs/AreasConfig';
+import { BUTTONS_CONFIG } from '../configs/ButtonsConfig';
 import { AreaModel, AreaType, BuildingType } from './AreaModel';
+import { ButtonModel } from './ButtonModel';
 import { ObservableModel } from './ObservableModel';
 
 export class BoardModel extends ObservableModel {
@@ -7,6 +9,7 @@ export class BoardModel extends ObservableModel {
     private _health = 10;
     private _food = 10;
     private _joy = 10;
+    private _buttons: ButtonModel[] = [];
 
     private _areas: AreaModel[] = [];
 
@@ -40,14 +43,18 @@ export class BoardModel extends ObservableModel {
         this._areas = value;
     }
 
+    public get buttons(): ButtonModel[] {
+        return this._buttons;
+    }
+
+    public set buttons(value: ButtonModel[]) {
+        this._buttons = value;
+    }
+
     public getFreeAreaByType(type: AreaType): AreaModel | undefined {
         const freeAreas = this.areas.filter((area) => area.type === type && !area.building);
         const rnd = Math.floor(Math.random() * freeAreas.length);
         return freeAreas.length === 0 ? undefined : freeAreas[rnd];
-    }
-
-    public addCoins(value: number): void {
-        this._coins += value;
     }
 
     public addHealth(value: number): void {
@@ -64,6 +71,12 @@ export class BoardModel extends ObservableModel {
 
     public decreaseCoins(value: number): void {
         this._coins -= value;
+
+        this.buttons.forEach((b) => {
+            if (b.price > this._coins) {
+                b.isActive = false;
+            }
+        });
     }
 
     public decreaseHealth(value: number): void {
@@ -89,6 +102,12 @@ export class BoardModel extends ObservableModel {
             const areaModel = new AreaModel(area);
             areaModel.initialize();
             return areaModel;
+        });
+
+        this._buttons = BUTTONS_CONFIG.map((c) => {
+            const buttonModel = new ButtonModel(c);
+            buttonModel.initialize();
+            return buttonModel;
         });
     }
 }

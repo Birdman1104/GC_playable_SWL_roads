@@ -7,7 +7,9 @@ export const AdModelEvents = {
 
 export const AreaModelEvents = { BuildingUpdate: 'AreaModelBuildingUpdate' };
 
-export const BoardModelEvents = { AreasUpdate: 'BoardModelAreasUpdate' };
+export const BoardModelEvents = { AreasUpdate: 'BoardModelAreasUpdate', ButtonsUpdate: 'BoardModelButtonsUpdate' };
+
+export const ButtonModelEvents = { TypeUpdate: 'ButtonModelTypeUpdate', IsActiveUpdate: 'ButtonModelIsActiveUpdate' };
 
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
 

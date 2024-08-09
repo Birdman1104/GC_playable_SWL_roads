@@ -33,6 +33,7 @@ export class UIView extends PixiGrid {
 
     private buildBottomBar(): void {
         this.bottomBar = new BottomBar();
+        this.bottomBar.on('rebuild', this.rebuild, this)
         this.setChild('bottomBar', this.bottomBar);
     }
 }

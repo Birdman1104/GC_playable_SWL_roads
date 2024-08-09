@@ -3,10 +3,7 @@ import { BottomBarEvents, MainGameEvents, TakeMe } from '../events/MainEvents';
 import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
-    onBuyFoodClickedCommand,
-    onBuyHospitalClickedCommand,
-    onBuyHouseClickedCommand,
-    onBuyJoyClickedCommand,
+    onBuyButtonClickedCommand,
     onGameStateUpdateCommand,
     onMainViewReadyCommand,
     resizeCommand,
@@ -47,19 +44,7 @@ const eventCommandPairs = Object.freeze([
         command: takeToStoreCommand,
     },
     {
-        event: BottomBarEvents.BuyFoodClicked,
-        command: onBuyFoodClickedCommand,
-    },
-    {
-        event: BottomBarEvents.BuyHealthClicked,
-        command: onBuyHospitalClickedCommand,
-    },
-    {
-        event: BottomBarEvents.BuyHouseClicked,
-        command: onBuyHouseClickedCommand,
-    },
-    {
-        event: BottomBarEvents.BuyJoyClicked,
-        command: onBuyJoyClickedCommand,
+        event: BottomBarEvents.ButtonClicked,
+        command: onBuyButtonClickedCommand,
     },
 ]);

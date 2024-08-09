@@ -5,12 +5,13 @@ import { AreaModelEvents, BoardModelEvents, GameModelEvents } from '../events/Mo
 import { AreaModel, BuildingType } from '../models/AreaModel';
 import { BoardModel } from '../models/BoardModel';
 import { GameState } from '../models/GameModel';
-import { lp, makeSprite } from '../utils';
+import { isSquareLikeScreen, lp, makeSprite } from '../utils';
 import { Area } from './Area';
 
 const BOUNDS = {
-    landscape: { x: -600, y: -500, width: 1050, height: 800 },
-    portrait: { x: -600, y: -400, width: 1050, height: 600 },
+    landscape: { x: -600, y: -450, width: 1050, height: 900 },
+    portrait: { x: -600, y: -500, width: 1050, height: 700 },
+    isPortraitSquare: { x: -600, y: -400, width: 1050, height: 700 },
 };
 export class BoardView extends Container {
     private bkg: Sprite;
@@ -36,7 +37,8 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: PIXI.Rectangle | undefined): PIXI.Rectangle {
-        const { x, y, width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
+        const bounds = isSquareLikeScreen() ? BOUNDS.isPortraitSquare : lp(BOUNDS.landscape, BOUNDS.portrait);
+        const { x, y, width, height } = bounds
         return new Rectangle(x, y, width, height);
     }
 
@@ -73,7 +75,6 @@ export class BoardView extends Container {
 
         this.bkg = makeSprite({ texture: Images['game/bkg'] });
         this.bkg.y = 28
-        // this.bkg.x = 25
         this.addChild(this.bkg);
     }
 

@@ -24,8 +24,5 @@ export const KeyboardEvents = {
 };
 
 export const BottomBarEvents = {
-    BuyFoodClicked: 'BottomBarEventsBuyFoodClicked',
-    BuyJoyClicked: 'BottomBarEventsBuyJoyClicked',
-    BuyHealthClicked: 'BottomBarEventsBuyHealthClicked',
-    BuyHouseClicked: 'BottomBarEventsBuyHouseClicked',
+    ButtonClicked: 'BottomBarEventsButtonClicked',
 };

@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import { AdStatus } from '../models/AdModel';
 import { AreaType, BuildingType } from '../models/AreaModel';
+import { ButtonType } from '../models/ButtonModel';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
@@ -8,6 +9,7 @@ import { unMapCommands } from './EventCommandPairs';
 import {
     ctaModelGuard,
     gameModelGuard,
+    hasEnoughMoneyGuard,
     hintModelGuard,
     hintParamGuard,
     soundParamGuard
@@ -85,32 +87,61 @@ const shutdownModelsCommand = (): void => {
         .execute(destroyHintModelCommand);
 };
 
-export const onBuyFoodClickedCommand = (price: number) => {
+export const buyFoodCommand = (price: number) => {
     const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
     if(!area) return
 
     area.addBuilding(BuildingType.Food)
 }
 
-export const onBuyHospitalClickedCommand = (price: number) => {
+export const buyHospitalCommand = (price: number) => {
     const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
     if(!area) return
 
     area.addBuilding(BuildingType.Hospital)
 }
 
-export const onBuyHouseClickedCommand = (price: number) => {
+export const buyHouseCommand = (price: number) => {
     const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Square);
     if(!area) return
 
     area.addBuilding(BuildingType.House)
 }
 
-export const onBuyJoyClickedCommand = (price: number) => {
+export const buyJoyCommand = (price: number) => {
     const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
     if(!area) return
 
     area.addBuilding(BuildingType.Park)
+}
+
+export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number): void => {
+    lego.command.guard(hasEnoughMoneyGuard).payload(price, buttonType).execute(processBuyActionsCommand)
+}
+
+const decreaseCoinsCommand = (price: number): void => {
+    Head.gameModel?.board?.decreaseCoins(price)
+}
+
+const processBuyActionsCommand = ( price: number, buttonType: ButtonType): void => {
+    lego.command.payload(price).execute(decreaseCoinsCommand)
+    switch (buttonType) {
+        case ButtonType.Food:
+            lego.command.execute(buyFoodCommand)
+            break;
+        case ButtonType.Health:
+            lego.command.execute(buyHospitalCommand)
+            break;
+        case ButtonType.House:
+            lego.command.execute(buyHouseCommand)
+            break;
+        case ButtonType.Joy:
+            lego.command.execute(buyJoyCommand)
+            break;
+    
+        default:
+            break;
+    }
 }
 
 export const addBuildingCommand = (locationID: string, building: BuildingType): void => {

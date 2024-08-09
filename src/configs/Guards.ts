@@ -38,3 +38,9 @@ export const isTutorialModeGuard = (): boolean => {
     return !!Head.gameModel?.isTutorial;
 };
 
+export const hasEnoughMoneyGuard = (price: number): boolean => {
+    if (!Head.gameModel?.board) return false;
+    const { coins } = Head.gameModel?.board;
+    if (!coins) return false;
+    return coins >= price;
+};
