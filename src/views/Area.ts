@@ -27,12 +27,21 @@ export class Area extends Container {
         this.building = makeSprite(getBuildingImgConfig(buildingType));
         this.building.scale.set(0);
         anime({
-            targets: this.building.scale,
-            x: 1,
-            y: 1,
+            targets: this.area.scale,
+            x: 0,
+            y: 0,
             duration: 200,
             easing: 'easeInOutSine',
-        });
+            complete: () => {
+                anime({
+                    targets: this.building.scale,
+                    x: 1,
+                    y: 1,
+                    duration: 200,
+                    easing: 'easeInOutSine',
+                });
+            }
+        })
         this.addChild(this.building);
     }
 
