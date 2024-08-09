@@ -109,10 +109,10 @@ export const buyHouseCommand = (price: number) => {
 }
 
 export const buyJoyCommand = (price: number) => {
-    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
+    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Square);
     if(!area) return
 
-    area.addBuilding(BuildingType.Park)
+    area.addBuilding(BuildingType.WinterFountain)
 }
 
 export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number): void => {
