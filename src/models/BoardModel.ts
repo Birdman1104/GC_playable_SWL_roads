@@ -1,5 +1,5 @@
 import { AREAS } from '../configs/AreasConfig';
-import { AreaModel, BuildingType } from './AreaModel';
+import { AreaModel, AreaType, BuildingType } from './AreaModel';
 import { ObservableModel } from './ObservableModel';
 
 export class BoardModel extends ObservableModel {
@@ -38,6 +38,12 @@ export class BoardModel extends ObservableModel {
 
     public set areas(value: AreaModel[]) {
         this._areas = value;
+    }
+
+    public getFreeAreaByType(type: AreaType): AreaModel | undefined {
+        const freeAreas = this.areas.filter((area) => area.type === type && !area.building);
+        const rnd = Math.floor(Math.random() * freeAreas.length);
+        return freeAreas.length === 0 ? undefined : freeAreas[rnd];
     }
 
     public addCoins(value: number): void {
@@ -83,6 +89,6 @@ export class BoardModel extends ObservableModel {
             const areaModel = new AreaModel(area);
             areaModel.initialize();
             return areaModel;
-        })
+        });
     }
 }

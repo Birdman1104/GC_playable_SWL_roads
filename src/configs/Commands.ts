@@ -1,5 +1,6 @@
 import { lego } from '@armathai/lego';
 import { AdStatus } from '../models/AdModel';
+import { AreaType, BuildingType } from '../models/AreaModel';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
@@ -83,6 +84,38 @@ const shutdownModelsCommand = (): void => {
         .guard(hintModelGuard)
         .execute(destroyHintModelCommand);
 };
+
+export const onBuyFoodClickedCommand = (price: number) => {
+    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
+    if(!area) return
+
+    area.addBuilding(BuildingType.Food)
+}
+
+export const onBuyHospitalClickedCommand = (price: number) => {
+    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
+    if(!area) return
+
+    area.addBuilding(BuildingType.Hospital)
+}
+
+export const onBuyHouseClickedCommand = (price: number) => {
+    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Square);
+    if(!area) return
+
+    area.addBuilding(BuildingType.House)
+}
+
+export const onBuyJoyClickedCommand = (price: number) => {
+    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
+    if(!area) return
+
+    area.addBuilding(BuildingType.Park)
+}
+
+export const addBuildingCommand = (locationID: string, building: BuildingType): void => {
+    Head.gameModel?.board?.addBuilding(locationID, building);
+}
 
 export const onAdStatusUpdateCommand = (status: AdStatus): void => {
     switch (status) {

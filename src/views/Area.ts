@@ -1,3 +1,4 @@
+import anime from 'animejs';
 import { Container, Point, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { AreaModel, AreaType, BuildingType } from '../models/AreaModel';
@@ -20,6 +21,19 @@ export class Area extends Container {
 
     get type() {
         return this.config.type;
+    }
+
+    public addBuilding(buildingType: BuildingType): void {
+        this.building = makeSprite(getBuildingImgConfig(buildingType));
+        this.building.scale.set(0);
+        anime({
+            targets: this.building.scale,
+            x: 1,
+            y: 1,
+            duration: 200,
+            easing: 'easeInOutSine',
+        });
+        this.addChild(this.building);
     }
 
     private build() {
