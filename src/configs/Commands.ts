@@ -1,18 +1,24 @@
 import { lego } from '@armathai/lego';
 import { AdStatus } from '../models/AdModel';
-import { AreaType, BuildingType } from '../models/AreaModel';
+import { BuildingType } from '../models/AreaModel';
+import { BoardState } from '../models/BoardModel';
 import { ButtonType } from '../models/ButtonModel';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
 import { unMapCommands } from './EventCommandPairs';
 import {
+    boardModelStateFirstSceneGuard,
+    boardModelStateGameGuard,
+    boardModelStateSecondSceneGuard,
     ctaModelGuard,
     gameModelGuard,
+    hasEmptyRectangleArea,
+    hasEmptySquareArea,
     hasEnoughMoneyGuard,
     hintModelGuard,
     hintParamGuard,
-    soundParamGuard
+    soundParamGuard,
 } from './Guards';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
@@ -88,65 +94,173 @@ const shutdownModelsCommand = (): void => {
 };
 
 export const buyFoodCommand = (price: number) => {
-    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
-    if(!area) return
+    lego.command
+        //
+        .guard(hasEmptySquareArea)
+        .payload(price)
+        .execute(decreaseCoinsCommand)
 
-    area.addBuilding(BuildingType.Food)
-}
+        .guard(hasEmptySquareArea)
+        .payload(BuildingType.Food)
+        .execute(addBuildingCommand);
+};
 
 export const buyHospitalCommand = (price: number) => {
-    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Rectangle);
-    if(!area) return
-
-    area.addBuilding(BuildingType.Hospital)
-}
+    lego.command
+        //
+        .guard(hasEmptyRectangleArea)
+        .payload(price)
+        .execute(decreaseCoinsCommand)
+        
+        .guard(hasEmptyRectangleArea)
+        .payload(BuildingType.Hospital)
+        .execute(addBuildingCommand);
+};
 
 export const buyHouseCommand = (price: number) => {
-    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Square);
-    if(!area) return
+    lego.command
+        //
+        .guard(hasEmptySquareArea)
+        .payload(price)
+        .execute(decreaseCoinsCommand)
 
-    area.addBuilding(BuildingType.House)
-}
+        .guard(hasEmptySquareArea)
+        .payload(BuildingType.House)
+        .execute(addBuildingCommand);
+};
 
 export const buyJoyCommand = (price: number) => {
-    const area = Head.gameModel?.board?.getFreeAreaByType(AreaType.Square);
-    if(!area) return
+    lego.command
+        //
+        .guard(hasEmptySquareArea)
+        .payload(price)
+        .execute(decreaseCoinsCommand)
 
-    area.addBuilding(BuildingType.WinterFountain)
-}
+        .guard(hasEmptySquareArea)
+        .payload(BuildingType.WinterFountain)
+        .execute(addBuildingCommand);
+};
 
 export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number): void => {
-    lego.command.guard(hasEnoughMoneyGuard).payload(price, buttonType).execute(processBuyActionsCommand)
-}
+    lego.command.guard(hasEnoughMoneyGuard).payload(price, buttonType).execute(processBuyActionsCommand);
+};
 
 const decreaseCoinsCommand = (price: number): void => {
-    Head.gameModel?.board?.decreaseCoins(price)
-}
+    Head.gameModel?.board?.decreaseCoins(price);
+};
 
-const processBuyActionsCommand = ( price: number, buttonType: ButtonType): void => {
-    lego.command.payload(price).execute(decreaseCoinsCommand)
+const processBuyActionsCommand = (price: number, buttonType: ButtonType): void => {
     switch (buttonType) {
         case ButtonType.Food:
-            lego.command.execute(buyFoodCommand)
+            lego.command
+                .payload(price)
+                .guard(boardModelStateSecondSceneGuard)
+                .execute(buyFoodCommand)
+                
+                .payload(price)
+                .guard(boardModelStateGameGuard)
+                .execute(buyFoodCommand)
+
+                .guard(boardModelStateSecondSceneGuard)
+                .payload(BoardState.Game)
+                .execute(setBoardStateCommand);
+
             break;
         case ButtonType.Health:
-            lego.command.execute(buyHospitalCommand)
+            lego.command
+                .payload(price)
+                .guard(boardModelStateSecondSceneGuard)
+                .execute(buyHospitalCommand)
+
+                .payload(price)
+                .guard(boardModelStateGameGuard)
+                .execute(buyHospitalCommand)
+
+                .guard(boardModelStateSecondSceneGuard)
+                .payload(BoardState.Game)
+                .execute(setBoardStateCommand);
             break;
         case ButtonType.House:
-            lego.command.execute(buyHouseCommand)
+            lego.command
+                .payload(price)
+                .guard(boardModelStateFirstSceneGuard)
+                .execute(buyHouseCommand)
+
+                .payload(price)
+                .guard(boardModelStateGameGuard)
+                .execute(buyHouseCommand)
+
+                .guard(boardModelStateFirstSceneGuard)
+                .payload(BoardState.SecondScene)
+                .execute(setBoardStateCommand);
             break;
         case ButtonType.Joy:
-            lego.command.execute(buyJoyCommand)
+            lego.command
+                .payload(price)
+                .guard(boardModelStateSecondSceneGuard)
+                .execute(buyJoyCommand)
+
+                .payload(price)
+                .guard(boardModelStateGameGuard)
+                .execute(buyJoyCommand)
+
+                .guard(boardModelStateSecondSceneGuard)
+                .payload(BoardState.Game)
+                .execute(setBoardStateCommand);
             break;
-    
+
         default:
             break;
     }
+};
+
+export const onBoardStateUpdateCommand = (state: BoardState): void => {
+    switch (state) {
+        case BoardState.FirstScene:
+            lego.command
+                //
+                .execute(disableNonHouseButtonsCommand);
+            break;
+        case BoardState.SecondScene:
+            lego.command
+                //
+                .execute(enableNonHouseButtonsCommand);
+            break;
+        case BoardState.Game:
+            lego.command
+                //
+                .execute(enableAllButtonsCommand)
+                .execute(turnOffTutorialModeCommand)
+
+                .guard(hintModelGuard)
+                .execute(destroyHintModelCommand)
+
+                .execute(startMoneyGeneratorLoopCommand);
+            break;
+        default:
+            break;
+    }
+};
+
+const startMoneyGeneratorLoopCommand = (): void => {
+    Head.gameModel?.board?.startMoneyGenerationLoop();
 }
 
-export const addBuildingCommand = (locationID: string, building: BuildingType): void => {
-    Head.gameModel?.board?.addBuilding(locationID, building);
-}
+const disableNonHouseButtonsCommand = (): void => {
+    Head.gameModel?.board?.disableNonHouseButtons();
+};
+
+const enableNonHouseButtonsCommand = (): void => {
+    Head.gameModel?.board?.enableNonHouseButtons();
+};
+
+const enableAllButtonsCommand = (): void => {
+    Head.gameModel?.board?.enableAllButtons();
+};
+
+export const addBuildingCommand = (building: BuildingType): void => {
+    Head.gameModel?.board?.addBuilding(building);
+};
 
 export const onAdStatusUpdateCommand = (status: AdStatus): void => {
     switch (status) {
@@ -178,6 +292,7 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
 };
 
 const setGameStateCommand = (state: GameState): void => Head.gameModel?.setState(state);
+const setBoardStateCommand = (state: BoardState): void => Head.gameModel?.board?.setState(state);
 const showCtaCommand = (): void => Head.ad?.cta?.show();
 
 const turnOffTutorialModeCommand = (): void => Head.gameModel?.turnOffTutorialMode();

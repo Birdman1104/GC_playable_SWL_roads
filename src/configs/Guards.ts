@@ -1,4 +1,6 @@
 import { AdStatus } from '../models/AdModel';
+import { AreaType } from '../models/AreaModel';
+import { BoardState } from '../models/BoardModel';
 import Head from '../models/HeadModel';
 import { GAME_CONFIG } from './GameConfig';
 
@@ -43,4 +45,24 @@ export const hasEnoughMoneyGuard = (price: number): boolean => {
     const { coins } = Head.gameModel?.board;
     if (!coins) return false;
     return coins >= price;
+};
+
+export const boardModelStateSecondSceneGuard = (): boolean => {
+    return Head.gameModel?.board?.state === BoardState.SecondScene
+};
+
+export const boardModelStateFirstSceneGuard = (): boolean => {
+    return Head.gameModel?.board?.state === BoardState.FirstScene
+};
+
+export const boardModelStateGameGuard = (): boolean => {
+    return Head.gameModel?.board?.state === BoardState.Game
+};
+
+export const hasEmptySquareArea = (): boolean => {
+    return !!Head.gameModel?.board?.areas.find(area => !area.building && area.type === AreaType.Square);
+};
+
+export const hasEmptyRectangleArea = (): boolean => {
+    return !!Head.gameModel?.board?.areas.find(area => !area.building && area.type === AreaType.Rectangle);
 };

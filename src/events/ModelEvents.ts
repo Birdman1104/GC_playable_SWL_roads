@@ -8,6 +8,7 @@ export const AdModelEvents = {
 export const AreaModelEvents = { BuildingUpdate: 'AreaModelBuildingUpdate' };
 
 export const BoardModelEvents = {
+    StateUpdate: 'BoardModelStateUpdate',
     CoinsUpdate: 'BoardModelCoinsUpdate',
     AreasUpdate: 'BoardModelAreasUpdate',
     ButtonsUpdate: 'BoardModelButtonsUpdate',
