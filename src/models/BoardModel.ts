@@ -14,7 +14,7 @@ export enum BoardState {
     Win = 'win',
 }
 export class BoardModel extends ObservableModel {
-    private _coins = 1000;
+    private _coins: number;
     private _health: number;
     private _food: number;
     private _joy: number;
@@ -194,6 +194,7 @@ export class BoardModel extends ObservableModel {
             return buttonModel;
         });
 
+        this._coins = 1000;
         this._health = 5;
         this._food = 2;
         this._joy = 3;
