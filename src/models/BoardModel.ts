@@ -91,6 +91,11 @@ export class BoardModel extends ObservableModel {
         return freeAreas.length === 0 ? undefined : freeAreas[rnd];
     }
 
+    public isLastFreeArea(): boolean {
+        const freeAreas = this.areas.filter((area) => !area.building);
+        return freeAreas.length === 1;
+    }
+
     public setState(state: BoardState): void {
         this.state = state;
     }
@@ -212,7 +217,7 @@ export class BoardModel extends ObservableModel {
         this._food = 2;
         this._joy = 3;
 
-        this.state = BoardState.Game;
+        this.state = BoardState.FirstScene;
     }
 
     private checkButtonsActive(): void {

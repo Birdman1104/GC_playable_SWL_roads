@@ -16,7 +16,8 @@ import {
     hasEnoughMoneyGuard,
     hintModelGuard,
     hintParamGuard,
-    soundParamGuard
+    isLastBuildingGuard,
+    soundParamGuard,
 } from './Guards';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
@@ -35,9 +36,6 @@ const initializeCtaModelCommand = (): void => Head.ad?.initializeCtaModel();
 const initializeSoundModelCommand = (): void => Head.ad?.initializeSoundModel();
 const initializeHintModelCommand = (): void => Head.ad?.initializeHintModel();
 
-const startIdleTimerCommand = (): void => Head.ad?.startIdleTimer();
-const stopIdleTimerCommand = (): void => Head.ad?.stopIdleTimer();
-
 const setHintStateCommand = (state: HintState): void => Head.ad?.hint?.setState(state);
 const startHintVisibilityTimerCommand = (time?: number): void => Head.ad?.hint?.startVisibilityTimer(time);
 const stopHintVisibilityTimerCommand = (): void => Head.ad?.hint?.stopVisibilityTimer();
@@ -54,6 +52,9 @@ const initializeModelsCommand = (): void => {
 
         .guard(hintParamGuard)
         .execute(initializeHintModelCommand)
+
+        .guard(hintParamGuard)
+        .execute(startHintVisibilityTimerCommand);
 };
 
 const hideHintCommand = (): void => {
@@ -73,11 +74,11 @@ const setAdStatusCommand = (status: AdStatus): void => Head.ad?.setAdStatus(stat
 export const buyFoodCommand = (price: number) => {
     lego.command
         //
-        .guard(hasEmptySquareArea)
+        .guard(hasEmptyRectangleArea)
         .payload(price)
         .execute(decreaseCoinsCommand)
 
-        .guard(hasEmptySquareArea)
+        .guard(hasEmptyRectangleArea)
         .payload(BuildingType.Food)
         .execute(addBuildingCommand);
 };
@@ -119,7 +120,25 @@ export const buyJoyCommand = (price: number) => {
 };
 
 export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number): void => {
-    lego.command.guard(hasEnoughMoneyGuard).payload(price, buttonType).execute(processBuyActionsCommand);
+    if (!hasEnoughMoneyGuard(price)) {
+        lego.command
+            .payload(AdStatus.Cta)
+            .execute(setAdStatusCommand)
+
+            .execute(takeToStoreCommand);
+    }
+
+    lego.command
+        .guard(isLastBuildingGuard)
+        .execute(takeToStoreCommand)
+
+        .guard(isLastBuildingGuard)
+        .payload(AdStatus.Cta)
+        .execute(setAdStatusCommand)
+
+        .guard(hasEnoughMoneyGuard)
+        .payload(price, buttonType)
+        .execute(processBuyActionsCommand);
 };
 
 const decreaseCoinsCommand = (price: number): void => {
@@ -232,6 +251,12 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
 
                 .execute(startMoneyGeneratorLoopCommand);
             break;
+        case BoardState.Fail:
+            lego.command
+                //
+                .payload(AdStatus.Cta)
+                .execute(setAdStatusCommand);
+            break;
         default:
             break;
     }
@@ -281,8 +306,10 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
             // lego.command.guard(gameModelGuard).execute(destroyGameModelCommand);
             lego.command
                 //
-                .execute(takeToStoreCommand)
-                .execute(showCtaCommand);
+                .execute(showCtaCommand)
+
+                .payload(BoardState.Win)
+                .execute(setBoardStateCommand);
 
             break;
         default:

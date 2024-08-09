@@ -66,3 +66,7 @@ export const hasEmptySquareArea = (): boolean => {
 export const hasEmptyRectangleArea = (): boolean => {
     return !!Head.gameModel?.board?.areas.find(area => !area.building && area.type === AreaType.Rectangle);
 };
+
+export const isLastBuildingGuard = (): boolean => {
+    return !!Head.gameModel?.board?.isLastFreeArea()
+};

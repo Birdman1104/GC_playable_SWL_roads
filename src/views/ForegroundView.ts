@@ -12,8 +12,7 @@ import { HintModel } from '../models/HintModel';
 import { callIfExists, delayRunnable, makeSprite, tweenToCell } from '../utils';
 import { HintView } from './HintView';
 
-// TODO -> 2.5 sec
-const TEXT_DISPLAY_DURATION = 1;
+const TEXT_DISPLAY_DURATION = 2;
 
 export class ForegroundView extends PixiGrid {
     private hint: HintView | null;

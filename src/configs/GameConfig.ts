@@ -3,8 +3,6 @@ export const GAME_CONFIG = Object.freeze({
     Hint: true,
     Sound: true,
 
-    IdleTime: 80, // Seconds. Если игрок бездействует столько секунд,игра идет в стор
-
     // Параметры для разных версий
     //
 });
