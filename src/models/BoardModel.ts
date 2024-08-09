@@ -183,7 +183,7 @@ export class BoardModel extends ObservableModel {
             case BuildingType.WinterFountain:
                 this.addJoy(2);
                 break;
-        
+
             default:
                 break;
         }
@@ -212,12 +212,14 @@ export class BoardModel extends ObservableModel {
         this._food = 2;
         this._joy = 3;
 
-        this.state = BoardState.FirstScene;
+        this.state = BoardState.Game;
     }
 
     private checkButtonsActive(): void {
-        this.buttons.forEach((b) => {
+        for (let i = 0; i < this.buttons.length; i++) {
+            const b = this.buttons[i];
             b.isActive = b.price <= this._coins;
+            if (!b.isActive) continue;
             if (b.type === ButtonType.House || b.type === ButtonType.Joy) {
                 const emptyAreas = this.areas.filter((a) => !a.building && a.type === AreaType.Square);
                 b.isActive = emptyAreas.length > 0;
@@ -225,7 +227,7 @@ export class BoardModel extends ObservableModel {
                 const emptyAreas = this.areas.filter((a) => !a.building && a.type === AreaType.Rectangle);
                 b.isActive = emptyAreas.length > 0;
             }
-        });
+        }
     }
 
     private collectCoins(): void {

@@ -54,11 +54,6 @@ const initializeModelsCommand = (): void => {
 
         .guard(hintParamGuard)
         .execute(initializeHintModelCommand)
-
-        .execute(startIdleTimerCommand)
-
-        .guard(hintParamGuard)
-        .execute(startHintVisibilityTimerCommand);
 };
 
 const hideHintCommand = (): void => {
@@ -228,6 +223,9 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
                 //
                 .execute(enableAllButtonsCommand)
                 .execute(turnOffTutorialModeCommand)
+
+                .guard(hintModelGuard)
+                .execute(hideHintCommand)
 
                 .guard(hintModelGuard)
                 .execute(destroyHintModelCommand)
