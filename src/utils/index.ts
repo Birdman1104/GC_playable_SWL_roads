@@ -68,7 +68,7 @@ export const isSquareLikeScreen = (): boolean => {
 
 export const isNarrowScreen = (): boolean => {
     const { width, height } = getGameBounds();
-    return Math.min(width, height) / Math.max(width, height) < 0.6;
+    return Math.min(width, height) / Math.max(width, height) < 0.5;
 };
 
 export const getViewByProperty = (prop, value, parent?) => {

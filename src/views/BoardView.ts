@@ -4,21 +4,25 @@ import { Images } from '../assets';
 import { BoardEvents } from '../events/MainEvents';
 import { AreaModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { AreaModel, BuildingType } from '../models/AreaModel';
-import { BoardModel } from '../models/BoardModel';
 import { GameState } from '../models/GameModel';
-import { delayRunnable, isSquareLikeScreen, lp, makeSprite } from '../utils';
+import { delayRunnable, isNarrowScreen, isSquareLikeScreen, lp, makeSprite } from '../utils';
 import { Area } from './Area';
 
 const BOUNDS = {
-    landscape: { x: -600, y: -450, width: 1050, height: 900 },
-    portrait: { x: -600, y: -500, width: 1050, height: 700 },
-    isPortraitSquare: { x: -600, y: -400, width: 1050, height: 700 },
+    landscape: { x: -400, y: -450, width: 800, height: 800 },
+    portrait: { x: -550, y: -400, width: 1000, height: 600 },
+  
+    portraitSquare: { x: -550, y: -400, width: 1000, height: 700 },
+    landscapeSquare: { x: -450, y: -450, width: 800, height: 900 },
+  
+    portraitNarrow: { x: -550, y: -400, width: 1000, height: 700 },
+    landscapeNarrow: { x: -400, y: -380, width: 800, height: 700 },
 };
 export class BoardView extends Container {
     private bkg: Sprite;
     private areas: Area[] = [];
 
-    constructor(private config: BoardModel) {
+    constructor() {
         super();
 
         lego.event
@@ -37,8 +41,21 @@ export class BoardView extends Container {
         return this.areas.find((area) => area.uuid === uuid);
     }
 
-    public getBounds(skipUpdate?: boolean | undefined, rect?: PIXI.Rectangle | undefined): PIXI.Rectangle {
-        const bounds = isSquareLikeScreen() ? BOUNDS.isPortraitSquare : lp(BOUNDS.landscape, BOUNDS.portrait);
+    public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
+        let bounds = BOUNDS.landscape;
+        if(isSquareLikeScreen()) {
+            console.warn('square', lp('landscape', 'portrait'));
+            
+            bounds = lp(BOUNDS.landscapeSquare, BOUNDS.portraitSquare);
+        } else if(isNarrowScreen()) {
+            console.warn('narrow', lp('landscape', 'portrait'));
+            bounds = lp(BOUNDS.landscapeNarrow, BOUNDS.portraitNarrow);
+        } else {
+            console.warn('normal', lp('landscape', 'portrait'));
+            bounds = lp(BOUNDS.landscape, BOUNDS.portrait);
+        }
+
+        // const bounds = isSquareLikeScreen() ? BOUNDS.isPortraitSquare : lp(BOUNDS.landscape, BOUNDS.portrait);
         const { x, y, width, height } = bounds;
         return new Rectangle(x, y, width, height);
     }

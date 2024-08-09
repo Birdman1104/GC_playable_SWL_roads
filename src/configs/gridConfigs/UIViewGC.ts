@@ -35,7 +35,7 @@ const getUIGridPortraitConfig = () => {
             {
                 name: 'bottomBar',
                 // scale: CellScale.showAll,
-                bounds: { x: 0, y: 0.74, width: 1, height: 0.25 },
+                bounds: { x: 0.1, y: 0.74, width: 0.8, height: 0.25 },
             },
             {
                 name: 'topBar',

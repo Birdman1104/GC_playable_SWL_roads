@@ -43,7 +43,7 @@ export class GameView extends PixiGrid {
     }
 
     private buildBoard(board: BoardModel): void {
-        this.board = new BoardView(board);
+        this.board = new BoardView();
         this.setChild('board', this.board);
     }
 
