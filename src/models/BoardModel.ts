@@ -23,6 +23,10 @@ export class BoardModel extends ObservableModel {
         return this._coins;
     }
 
+    public set coins(value: number) {
+        this._coins = value;
+    }
+
     public get health(): number {
         return this._health;
     }
