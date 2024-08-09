@@ -11,14 +11,12 @@ import {
     boardModelStateFirstSceneGuard,
     boardModelStateGameGuard,
     boardModelStateSecondSceneGuard,
-    ctaModelGuard,
-    gameModelGuard,
     hasEmptyRectangleArea,
     hasEmptySquareArea,
     hasEnoughMoneyGuard,
     hintModelGuard,
     hintParamGuard,
-    soundParamGuard,
+    soundParamGuard
 } from './Guards';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
@@ -77,22 +75,6 @@ const destroySoundModelCommand = (): void => Head.ad?.destroySoundModel();
 const destroyHintModelCommand = (): void => Head.ad?.destroyHintModel();
 const setAdStatusCommand = (status: AdStatus): void => Head.ad?.setAdStatus(status);
 
-const shutdownModelsCommand = (): void => {
-    lego.command
-
-        .guard(gameModelGuard)
-        .execute(destroyGameModelCommand)
-
-        .guard(ctaModelGuard)
-        .execute(destroyCtaModelCommand)
-
-        .guard(soundParamGuard)
-        .execute(destroySoundModelCommand)
-
-        .guard(hintModelGuard)
-        .execute(destroyHintModelCommand);
-};
-
 export const buyFoodCommand = (price: number) => {
     lego.command
         //
@@ -111,7 +93,7 @@ export const buyHospitalCommand = (price: number) => {
         .guard(hasEmptyRectangleArea)
         .payload(price)
         .execute(decreaseCoinsCommand)
-        
+
         .guard(hasEmptyRectangleArea)
         .payload(BuildingType.Hospital)
         .execute(addBuildingCommand);
@@ -156,7 +138,7 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
                 .payload(price)
                 .guard(boardModelStateSecondSceneGuard)
                 .execute(buyFoodCommand)
-                
+
                 .payload(price)
                 .guard(boardModelStateGameGuard)
                 .execute(buyFoodCommand)
@@ -185,16 +167,18 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
                 .payload(price)
                 .guard(boardModelStateFirstSceneGuard)
                 .execute(buyHouseCommand)
-                
+
                 .guard(boardModelStateFirstSceneGuard)
                 .execute(disableAllButtonsCommand)
+
+                .guard(boardModelStateFirstSceneGuard, hintModelGuard)
+                .execute(hideHintCommand)
+                .guard(boardModelStateFirstSceneGuard, hintModelGuard)
+                .execute(stopHintVisibilityTimerCommand)
 
                 .payload(price)
                 .guard(boardModelStateGameGuard)
-                .execute(buyHouseCommand)
-
-                .guard(boardModelStateFirstSceneGuard)
-                .execute(disableAllButtonsCommand)
+                .execute(buyHouseCommand);
             break;
         case ButtonType.Joy:
             lego.command
@@ -222,19 +206,22 @@ export const onHouseAnimationCompleteCommand = (): void => {
         .guard(boardModelStateFirstSceneGuard)
         .payload(BoardState.SecondScene)
         .execute(setBoardStateCommand);
-}
+};
 
 export const onBoardStateUpdateCommand = (state: BoardState): void => {
     switch (state) {
         case BoardState.FirstScene:
             lego.command
                 //
-                .execute(disableNonHouseButtonsCommand);
+                .execute(disableNonHouseButtonsCommand)
+
+                .execute(restartHintCommand);
             break;
         case BoardState.SecondScene:
             lego.command
                 //
-                .execute(enableNonHouseButtonsCommand);
+                .execute(enableNonHouseButtonsCommand)
+                .execute(restartHintCommand);
             break;
         case BoardState.Game:
             lego.command
@@ -254,7 +241,7 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
 
 const startMoneyGeneratorLoopCommand = (): void => {
     Head.gameModel?.board?.startMoneyGenerationLoop();
-}
+};
 
 const disableNonHouseButtonsCommand = (): void => {
     Head.gameModel?.board?.disableNonHouseButtons();
@@ -322,7 +309,7 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
     }
 };
 
-export const resizeCommand = (): void => {
+export const restartHintCommand = (): void => {
     lego.command
         //
         .guard(hintModelGuard)
@@ -333,6 +320,10 @@ export const resizeCommand = (): void => {
 
         .guard(hintModelGuard)
         .execute(startHintVisibilityTimerCommand);
+};
+
+export const resizeCommand = (): void => {
+    lego.command.execute(restartHintCommand);
 };
 
 export const takeToStoreCommand = (): void => {

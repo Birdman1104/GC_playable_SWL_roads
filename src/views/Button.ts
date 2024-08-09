@@ -29,18 +29,22 @@ export class Button extends Container {
         this.addChild(sprite);
     }
 
-    get uuid(): string{
-        return this.config.uuid
+    get uuid(): string {
+        return this.config.uuid;
+    }
+
+    get type(): string {
+        return this._type;
     }
 
     public activate(): void {
-      this._isActive = true
-      this.alpha = 1
+        this._isActive = true;
+        this.alpha = 1;
     }
 
     public deactivate(): void {
-      this._isActive = false
-      this.alpha = 0.7
+        this._isActive = false;
+        this.alpha = 0.7;
     }
 }
 
