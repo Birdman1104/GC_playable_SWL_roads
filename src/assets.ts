@@ -4,6 +4,7 @@ export const assets = {
     images: {
         'game/alley_fountain.png': require('../assets/images/game/alley_fountain.png').default,
         'game/bkg.jpg': require('../assets/images/game/bkg.jpg').default,
+        'game/build_a_house.png': require('../assets/images/game/build_a_house.png').default,
         'game/buy_cafe.png': require('../assets/images/game/buy_cafe.png').default,
         'game/buy_hospital.png': require('../assets/images/game/buy_hospital.png').default,
         'game/buy_house.png': require('../assets/images/game/buy_house.png').default,
@@ -21,6 +22,7 @@ export const assets = {
         'game/logo.png': require('../assets/images/game/logo.png').default,
         'game/progress_bar.png': require('../assets/images/game/progress_bar.png').default,
         'game/progress_bkg.png': require('../assets/images/game/progress_bkg.png').default,
+        'game/provide_for_citizens.png': require('../assets/images/game/provide_for_citizens.png').default,
         'game/rectangle.png': require('../assets/images/game/rectangle.png').default,
         'game/square.png': require('../assets/images/game/square.png').default,
         'game/winter_fountain.png': require('../assets/images/game/winter_fountain.png').default,
@@ -34,6 +36,7 @@ export const assets = {
 export const Images = {
     'game/alley_fountain': 'game/alley_fountain.png',
     'game/bkg': 'game/bkg.jpg',
+    'game/build_a_house': 'game/build_a_house.png',
     'game/buy_cafe': 'game/buy_cafe.png',
     'game/buy_hospital': 'game/buy_hospital.png',
     'game/buy_house': 'game/buy_house.png',
@@ -51,6 +54,7 @@ export const Images = {
     'game/logo': 'game/logo.png',
     'game/progress_bar': 'game/progress_bar.png',
     'game/progress_bkg': 'game/progress_bkg.png',
+    'game/provide_for_citizens': 'game/provide_for_citizens.png',
     'game/rectangle': 'game/rectangle.png',
     'game/square': 'game/square.png',
     'game/winter_fountain': 'game/winter_fountain.png',

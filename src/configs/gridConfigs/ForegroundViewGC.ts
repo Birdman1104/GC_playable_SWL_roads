@@ -1,3 +1,4 @@
+import { CellScale } from '@armathai/pixi-grid';
 import { lp } from '../../utils';
 
 export const getForegroundGridConfig = () => {
@@ -15,6 +16,23 @@ const getForegroundGridLandscapeConfig = () => {
                 name: 'cell',
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
+            {
+                name: 'text_from',
+                bounds: { x: -1, y: 0, width: 0.8, height: 1 },
+            },
+            {
+                name: 'text_show',
+                bounds: { x: 0.1, y: 0, width: 0.8, height: 1 },
+            },
+            {
+                name: 'text_to',
+                bounds: { x: 1, y: 0, width: 0.8, height: 1 },
+            },
+            {
+                name: 'blocker',
+                scale: CellScale.fill,
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
+            },
         ],
     };
 };
@@ -28,6 +46,23 @@ const getForegroundGridPortraitConfig = () => {
         cells: [
             {
                 name: 'cell',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
+            },
+            {
+                name: 'text_from',
+                bounds: { x: -1, y: 0, width: 0.8, height: 1 },
+            },
+            {
+                name: 'text_show',
+                bounds: { x: 0.1, y: 0, width: 0.8, height: 1 },
+            },
+            {
+                name: 'text_to',
+                bounds: { x: 1, y: 0, width: 0.8, height: 1 },
+            },
+            {
+                name: 'blocker',
+                scale: CellScale.fill,
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
         ],
