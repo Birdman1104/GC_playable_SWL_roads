@@ -4,7 +4,6 @@ import anime from 'animejs';
 import { Graphics, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
-import { TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents } from '../events/ModelEvents';
 import { AdStatus } from '../models/AdModel';
 import { BoardState } from '../models/BoardModel';
@@ -19,7 +18,6 @@ export class ForegroundView extends PixiGrid {
     private blocker: Graphics;
     private buildText: Sprite;
     private provideText: Sprite;
-    private failIcon: Sprite;
 
     constructor() {
         super();
@@ -107,9 +105,6 @@ export class ForegroundView extends PixiGrid {
             case BoardState.Game:
                 this.hideBlocker();
                 break;
-            case BoardState.Fail:
-                this.showFail();
-                break;
 
             default:
                 break;
@@ -138,30 +133,6 @@ export class ForegroundView extends PixiGrid {
         };
 
         this.showBlocker(cb);
-    }
-
-    private showFail(): void {
-        delayRunnable(0.5, () => {
-            this.failIcon = makeSprite({ texture: Images['game/fail'] });
-            this.failIcon.visible = true;
-            this.setChild('text_show', this.failIcon);
-            const scale = this.failIcon.scale.x;
-            this.failIcon.scale.set(0);
-            this.showBlocker();
-
-            anime({
-                targets: this.failIcon.scale,
-                x: scale,
-                y: scale,
-                duration: 600,
-                easing: 'easeOutElastic',
-                complete: () => {
-                    delayRunnable(1, () => {
-                        lego.event.emit(TakeMe.ToStore)
-                    });
-                }
-            });
-        });
     }
 
     private showBlocker(cb?): void {

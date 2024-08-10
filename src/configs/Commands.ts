@@ -126,6 +126,7 @@ export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number)
             .execute(setAdStatusCommand)
 
             .execute(takeToStoreCommand);
+            return
     }
 
     lego.command
@@ -136,7 +137,7 @@ export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number)
         .payload(AdStatus.Cta)
         .execute(setAdStatusCommand)
 
-        .guard(hasEnoughMoneyGuard)
+        .guard(lego.not(isLastBuildingGuard), hasEnoughMoneyGuard)
         .payload(price, buttonType)
         .execute(processBuyActionsCommand);
 };
