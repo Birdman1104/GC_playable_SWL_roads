@@ -180,13 +180,13 @@ export class BoardModel extends ObservableModel {
                 this.decreaseHealth(1);
                 break;
             case BuildingType.Hospital:
-                this.addHealth(2);
+                this.addHealth(5);
                 break;
             case BuildingType.Food:
                 this.addFood(2);
                 break;
             case BuildingType.WinterFountain:
-                this.addJoy(2);
+                this.addJoy(3);
                 break;
 
             default:
