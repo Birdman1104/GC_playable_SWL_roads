@@ -1,7 +1,7 @@
 import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
-import { BarType } from '../configs/constants';
+import { BarType, TEXT_COLOR } from '../configs/constants';
 import { makeSprite } from '../utils';
 
 
@@ -22,6 +22,7 @@ export class ProgressBar extends Container {
     public update(value: number): void {
         const scale = value < +this.valueText.text ? 0.8 : 1.2
         this.valueText.text = `${value}`
+        this.valueText.tint = TEXT_COLOR[value] || 0xFFFFFF
         anime({
             targets: this.valueText.scale,
             x: scale,
