@@ -195,8 +195,9 @@ export class BoardModel extends ObservableModel {
     }
 
     public startMoneyGenerationLoop(): void {
-        if (this.state !== BoardState.Game) return;
-        delayRunnable(1, () => this.collectCoins());
+        if (this.state === BoardState.Game || this.state === BoardState.SecondScene) {
+            delayRunnable(1, () => this.collectCoins());
+        }
     }
 
     public initialize(): void {

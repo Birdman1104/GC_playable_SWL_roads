@@ -235,7 +235,9 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
             lego.command
                 //
                 .execute(enableNonHouseButtonsCommand)
-                .execute(restartHintCommand);
+                .execute(restartHintCommand)
+
+                .execute(startMoneyGeneratorLoopCommand);
             break;
         case BoardState.Game:
             lego.command
@@ -249,7 +251,7 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
                 .guard(hintModelGuard)
                 .execute(destroyHintModelCommand)
 
-                .execute(startMoneyGeneratorLoopCommand);
+                
             break;
         case BoardState.Fail:
             lego.command

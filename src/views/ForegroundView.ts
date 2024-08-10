@@ -141,7 +141,7 @@ export class ForegroundView extends PixiGrid {
     }
 
     private showFail(): void {
-        delayRunnable(1.5, () => {
+        delayRunnable(0.5, () => {
             this.failIcon = makeSprite({ texture: Images['game/fail'] });
             this.failIcon.visible = true;
             this.setChild('text_show', this.failIcon);
