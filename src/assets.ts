@@ -2,6 +2,15 @@
 
 export const assets = {
     images: {
+        'game/1.png': require('../assets/images/game/1.png').default,
+        'game/2.png': require('../assets/images/game/2.png').default,
+        'game/3.png': require('../assets/images/game/3.png').default,
+        'game/4.png': require('../assets/images/game/4.png').default,
+        'game/5.png': require('../assets/images/game/5.png').default,
+        'game/6.png': require('../assets/images/game/6.png').default,
+        'game/7.png': require('../assets/images/game/7.png').default,
+        'game/8.png': require('../assets/images/game/8.png').default,
+        'game/9.png': require('../assets/images/game/9.png').default,
         'game/alley_fountain.png': require('../assets/images/game/alley_fountain.png').default,
         'game/bkg.jpg': require('../assets/images/game/bkg.jpg').default,
         'game/build_a_house.png': require('../assets/images/game/build_a_house.png').default,
@@ -34,6 +43,15 @@ export const assets = {
 };
 
 export const Images = {
+    'game/1': 'game/1.png',
+    'game/2': 'game/2.png',
+    'game/3': 'game/3.png',
+    'game/4': 'game/4.png',
+    'game/5': 'game/5.png',
+    'game/6': 'game/6.png',
+    'game/7': 'game/7.png',
+    'game/8': 'game/8.png',
+    'game/9': 'game/9.png',
     'game/alley_fountain': 'game/alley_fountain.png',
     'game/bkg': 'game/bkg.jpg',
     'game/build_a_house': 'game/build_a_house.png',

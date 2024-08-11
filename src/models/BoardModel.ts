@@ -222,6 +222,7 @@ export class BoardModel extends ObservableModel {
     }
 
     private checkButtonsActive(): void {
+        if(this.state !== BoardState.Game) return;
         for (let i = 0; i < this.buttons.length; i++) {
             const b = this.buttons[i];
             b.isActive = b.price <= this._coins;

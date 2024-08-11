@@ -1,13 +1,12 @@
 import anime from 'animejs';
-import { Container, Point, Sprite } from 'pixi.js';
+import { AnimatedSprite, Container, Point, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { AreaModel, AreaType, BuildingType } from '../models/AreaModel';
+import { AreaModel, BuildingType } from '../models/AreaModel';
 import { makeSprite } from '../utils';
 
 export class Area extends Container {
     private area: Sprite;
     private building: Sprite;
-    private _type: AreaType;
 
     constructor(private config: AreaModel) {
         super();
@@ -45,7 +44,29 @@ export class Area extends Container {
                 });
             },
         });
+
+        this.addDustAnimation();
+
         this.addChild(this.building);
+    }
+
+    private addDustAnimation(): void {
+        const frames: any[] = [];
+        for (let i = 1; i <= 9; i++) {
+            frames.push(Images[`game/${i}`]);
+        }
+
+        const anim = AnimatedSprite.fromFrames(frames);
+        anim.anchor.set(0.5);
+        anim.animationSpeed = 0.5;
+        anim.scale.set(0.6)
+        anim.loop = false;
+        
+        anim.play();
+        anim.onComplete = () => {
+            anim.destroy()
+        }
+        this.addChild(anim);
     }
 
     private build() {
