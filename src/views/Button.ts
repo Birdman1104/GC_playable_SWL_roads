@@ -24,7 +24,7 @@ export class Button extends Container {
         this.scale.set(SCALE);
 
         sprite.on('pointerdown', () => {
-            this._isActive && lego.event.emit(BottomBarEvents.ButtonClicked, this._type, this._price);
+            lego.event.emit(BottomBarEvents.ButtonClicked, this._type, this._price);
         });
         this.addChild(sprite);
     }
