@@ -1,14 +1,16 @@
 import anime from 'animejs';
-import { Container, Sprite, Text } from 'pixi.js';
+import { Container, Graphics, Point, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
-import { BarType, TEXT_COLOR } from '../configs/constants';
+import { BAR_MAX, BarType } from '../configs/constants';
 import { makeSprite } from '../utils';
-
 
 export class ProgressBar extends Container {
     private icon: Sprite;
+    private progressBar: Sprite;
     private progressBkg: Sprite;
-    private valueText: Text; 
+    private valueText: Text;
+    private maskGr: Graphics;
+    private value: number;
 
     constructor(private _type: BarType) {
         super();
@@ -19,35 +21,43 @@ export class ProgressBar extends Container {
         return this._type;
     }
 
-    public update(value: number): void {
-        const scale = value < +this.valueText.text ? 0.8 : 1.2
-        this.valueText.text = `${value}`
-        this.valueText.tint = TEXT_COLOR[value] || 0xFFFFFF
+    public updateValue(value: number): void {
+        this.value = value;
+        const newWidth = this.progressBar.width * (value / BAR_MAX);
         anime({
-            targets: this.valueText.scale,
-            x: scale,
-            y: scale,
-            duration: 100,
+            targets: this.maskGr,
+            width: newWidth,
+            duration: 1000,
             easing: 'easeInOutSine',
-            direction: 'alternate',
-            loop: 1,
-            complete: () => {
-                this.valueText.scale.set(1)
-            }
-        })
+            update: () => {
+                this.maskGr.x = -this.progressBar.width / 2 + this.progressBar.x;
+            },
+        });
     }
 
     private build(): void {
-        this.progressBkg = makeSprite({ texture: Images['game/progress_bkg'] });
+        this.progressBkg = makeSprite({ texture: Images['game/progress_bkg'], anchor: new Point(0.5)});
 
-        this.icon = makeSprite({ texture: this.getIconTexture() });
-        this.icon.x = -50;
-        
+        this.icon = makeSprite({ texture: this.getIconTexture(), anchor: new Point(0.5) });
+        this.icon.position.set(-80, -25);
+
         this.valueText = new Text('1000', { fontSize: 28, fill: 0xffffff });
         this.valueText.anchor.set(0.5);
         this.valueText.position.set(40, -6);
 
-        this.addChild(this.progressBkg, this.valueText, this.icon);
+        this.progressBar = makeSprite({ texture: Images['game/progress_bar'], anchor: new Point(0.5) });
+        this.progressBar.position.set(25, 3);
+        this.progressBar.scale.x = 0.925;
+        const { width: w, height: h, x, y } = this.progressBar;
+
+        this.maskGr = new Graphics();
+        this.maskGr.beginFill(0xffffff);
+        this.maskGr.drawRect(0, 0, w, h);
+        this.maskGr.endFill();
+
+        this.progressBar.mask = this.maskGr;
+
+        this.addChild(this.progressBkg, this.progressBar, this.maskGr, this.icon);
     }
 
     private getIconTexture(): string {

@@ -53,14 +53,14 @@ export class TopBar extends Container {
     }
 
     private onHealthUpdate(health: number): void {
-        this.healthBar.update(health);
+        this.healthBar.updateValue(health);
     }
 
     private onJoyUpdate(joy: number): void {
-        this.joyBar.update(joy);
+        this.joyBar.updateValue(joy);
     }
 
     private onFoodUpdate(food: number): void {
-        this.foodBar.update(food);
+        this.foodBar.updateValue(food);
     }
 }

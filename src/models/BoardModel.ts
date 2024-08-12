@@ -8,6 +8,7 @@ import { ObservableModel } from './ObservableModel';
 
 export enum BoardState {
     FirstScene = 'first_scene', // 'build a house', only house button
+    Idle = 'idle', // 'Provide for citizens', other buttons
     SecondScene = 'second_scene', // 'Provide for citizens', other buttons
     Game = 'game',
     Fail = 'fail',
@@ -122,15 +123,18 @@ export class BoardModel extends ObservableModel {
     }
 
     public addHealth(value: number): void {
-        this._health += value;
+        const newValue = Math.min(5, this._health + value);
+        this._health = newValue;
     }
 
     public addFood(value: number): void {
-        this._food += value;
+        const newValue = Math.min(5, this._food + value);
+        this._food  = newValue;
     }
 
     public addJoy(value: number): void {
-        this._joy += value;
+        const newValue = Math.min(5, this._joy + value);
+        this._joy  = newValue;
     }
 
     public decreaseCoins(value: number): void {

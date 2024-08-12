@@ -11,6 +11,8 @@ export const PRICES = {
     house: 100,
 };
 
+export const BAR_MAX = 5
+
 export const HOUSE_COINS_PER_SECOND = 5;
 
 export const GENERATED_TEXTURES: any = {};

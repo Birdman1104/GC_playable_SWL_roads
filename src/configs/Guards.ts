@@ -55,6 +55,10 @@ export const boardModelStateFirstSceneGuard = (): boolean => {
     return Head.gameModel?.board?.state === BoardState.FirstScene
 };
 
+export const boardModelStateIdleGuard = (): boolean => {
+    return Head.gameModel?.board?.state === BoardState.Idle
+};
+
 export const boardModelStateGameGuard = (): boolean => {
     return Head.gameModel?.board?.state === BoardState.Game
 };

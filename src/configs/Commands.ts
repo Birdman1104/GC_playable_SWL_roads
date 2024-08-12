@@ -10,6 +10,7 @@ import { unMapCommands } from './EventCommandPairs';
 import {
     boardModelStateFirstSceneGuard,
     boardModelStateGameGuard,
+    boardModelStateIdleGuard,
     boardModelStateSecondSceneGuard,
     hasEmptyRectangleArea,
     hasEmptySquareArea,
@@ -126,7 +127,7 @@ export const onBuyButtonClickedCommand = (buttonType: ButtonType, price: number)
             .execute(setAdStatusCommand)
 
             .execute(takeToStoreCommand);
-            return
+        return;
     }
 
     lego.command
@@ -179,15 +180,20 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
             break;
         case ButtonType.House:
             lego.command
+                .guard(boardModelStateFirstSceneGuard)
+                .execute(disableAllButtonsCommand)
+                
                 .payload(price)
                 .guard(boardModelStateFirstSceneGuard)
                 .execute(buyHouseCommand)
-
+                
                 .guard(boardModelStateFirstSceneGuard)
-                .execute(disableAllButtonsCommand)
+                .payload(BoardState.Idle)
+                .execute(setBoardStateCommand)
 
                 .guard(boardModelStateFirstSceneGuard, hintModelGuard)
                 .execute(hideHintCommand)
+                
                 .guard(boardModelStateFirstSceneGuard, hintModelGuard)
                 .execute(stopHintVisibilityTimerCommand)
 
@@ -218,7 +224,7 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
 export const onHouseAnimationCompleteCommand = (): void => {
     lego.command
         //
-        .guard(boardModelStateFirstSceneGuard)
+        .guard(boardModelStateIdleGuard)
         .payload(BoardState.SecondScene)
         .execute(setBoardStateCommand);
 };
@@ -231,6 +237,12 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
                 .execute(disableNonHouseButtonsCommand)
 
                 .execute(restartHintCommand);
+            break;
+        case BoardState.Idle:
+            lego.command
+                //
+                .guard(hintModelGuard)
+                .execute(hideHintCommand)
             break;
         case BoardState.SecondScene:
             lego.command
@@ -250,9 +262,8 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
                 .execute(hideHintCommand)
 
                 .guard(hintModelGuard)
-                .execute(destroyHintModelCommand)
+                .execute(destroyHintModelCommand);
 
-                
             break;
         case BoardState.Fail:
             lego.command
