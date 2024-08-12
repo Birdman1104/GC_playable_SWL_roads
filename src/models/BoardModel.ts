@@ -123,18 +123,15 @@ export class BoardModel extends ObservableModel {
     }
 
     public addHealth(value: number): void {
-        const newValue = Math.min(5, this._health + value);
-        this._health = newValue;
+        this._health += value;
     }
 
     public addFood(value: number): void {
-        const newValue = Math.min(5, this._food + value);
-        this._food  = newValue;
+        this._food += value;
     }
 
     public addJoy(value: number): void {
-        const newValue = Math.min(5, this._joy + value);
-        this._joy  = newValue;
+        this._joy += value;
     }
 
     public decreaseCoins(value: number): void {

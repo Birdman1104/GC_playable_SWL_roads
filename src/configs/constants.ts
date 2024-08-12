@@ -18,4 +18,4 @@ export const HOUSE_COINS_PER_SECOND = 5;
 export const GENERATED_TEXTURES: any = {};
 
 
-export const TEXT_COLOR = [0xFF0000, 0xFF6666, 0xFFCCCC, 0xFFFFFF]
+export const TEXT_COLOR = [0xFFCCCC, 0xFF0000, 0xFF9999,  0x000000]

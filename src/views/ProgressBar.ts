@@ -1,7 +1,7 @@
 import anime from 'animejs';
 import { Container, Graphics, Point, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
-import { BAR_MAX, BarType } from '../configs/constants';
+import { BAR_MAX, BarType, TEXT_COLOR } from '../configs/constants';
 import { makeSprite } from '../utils';
 
 export class ProgressBar extends Container {
@@ -22,8 +22,8 @@ export class ProgressBar extends Container {
     }
 
     public updateValue(value: number): void {
-        this.value = value;
-        const newWidth = this.progressBar.width * (value / BAR_MAX);
+        this.value = Math.min(value, BAR_MAX);
+        const newWidth = this.progressBar.width * (this.value / BAR_MAX);
         anime({
             targets: this.maskGr,
             width: newWidth,
@@ -33,6 +33,24 @@ export class ProgressBar extends Container {
                 this.maskGr.x = -this.progressBar.width / 2 + this.progressBar.x;
             },
         });
+
+
+        const scale = value < +this.valueText.text ? 0.8 : 1.2
+        this.valueText.text = `${value}`
+        this.valueText.tint = TEXT_COLOR[value] || 0x000000
+
+        anime({
+            targets: this.valueText.scale,
+            x: scale,
+            y: scale,
+            duration: 100,
+            easing: 'easeInOutSine',
+            direction: 'alternate',
+            loop: 1,
+            complete: () => {
+                this.valueText.scale.set(1)
+            }
+        })
     }
 
     private build(): void {
@@ -43,7 +61,7 @@ export class ProgressBar extends Container {
 
         this.valueText = new Text('1000', { fontSize: 28, fill: 0xffffff });
         this.valueText.anchor.set(0.5);
-        this.valueText.position.set(40, -6);
+        this.valueText.position.set(25, 18);
 
         this.progressBar = makeSprite({ texture: Images['game/progress_bar'], anchor: new Point(0.5) });
         this.progressBar.position.set(25, 3);
@@ -57,7 +75,7 @@ export class ProgressBar extends Container {
 
         this.progressBar.mask = this.maskGr;
 
-        this.addChild(this.progressBkg, this.progressBar, this.maskGr, this.icon);
+        this.addChild(this.progressBkg, this.progressBar, this.maskGr, this.valueText,  this.icon);
     }
 
     private getIconTexture(): string {
