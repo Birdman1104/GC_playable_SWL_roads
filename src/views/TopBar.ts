@@ -36,19 +36,19 @@ export class TopBar extends Container {
     
     private buildJoyBar(): void {
         this.joyBar = new ProgressBar(BarType.Joy);
-        this.joyBar.position.set(this.foodBar.x + this.foodBar.width + 30, 0);
+        this.joyBar.position.set(this.foodBar.x + this.foodBar.width + 15, 0);
         this.addChild(this.joyBar);
     }
     
     private buildHealthBar(): void {
         this.healthBar = new ProgressBar(BarType.Health);
-        this.healthBar.position.set(this.joyBar.x + this.joyBar.width + 30, 0);
+        this.healthBar.position.set(this.joyBar.x + this.joyBar.width + 15, 0);
         this.addChild(this.healthBar);
     }
     
     private buildCoinsBar(): void {
         this.coinsBar = new CoinsBar();
-        this.coinsBar.position.set(this.healthBar.x + this.healthBar.width + 30, 0);
+        this.coinsBar.position.set(this.healthBar.x + this.healthBar.width, 0);
         this.addChild(this.coinsBar);
     }
 
