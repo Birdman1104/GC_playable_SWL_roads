@@ -19,7 +19,7 @@ function isAppleDevice() {
     return /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
 }
 
-window.installCTA = () => {
+window.CTACallImitation = () => {
     if(isAppleDevice()) {
         window.open('https://apps.apple.com/ru/app/global-city-build-a-megapolis/id1455860184?l=en-GB')
     } else {

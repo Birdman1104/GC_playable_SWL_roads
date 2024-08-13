@@ -4,6 +4,7 @@ interface Window {
     createGame: () => void;
     installCTA: () => void;
     gameReadyCall: () => void;
+    CTACallImitation: () => void;
     soundMute: (value: boolean) => void;
 }
 

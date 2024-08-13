@@ -182,18 +182,18 @@ const processBuyActionsCommand = (price: number, buttonType: ButtonType): void =
             lego.command
                 .guard(boardModelStateFirstSceneGuard)
                 .execute(disableAllButtonsCommand)
-                
+
                 .payload(price)
                 .guard(boardModelStateFirstSceneGuard)
                 .execute(buyHouseCommand)
-                
+
                 .guard(boardModelStateFirstSceneGuard)
                 .payload(BoardState.Idle)
                 .execute(setBoardStateCommand)
 
                 .guard(boardModelStateFirstSceneGuard, hintModelGuard)
                 .execute(hideHintCommand)
-                
+
                 .guard(boardModelStateFirstSceneGuard, hintModelGuard)
                 .execute(stopHintVisibilityTimerCommand)
 
@@ -242,7 +242,7 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
             lego.command
                 //
                 .guard(hintModelGuard)
-                .execute(hideHintCommand)
+                .execute(hideHintCommand);
             break;
         case BoardState.SecondScene:
             lego.command
@@ -366,5 +366,9 @@ export const resizeCommand = (): void => {
 };
 
 export const takeToStoreCommand = (): void => {
-    window.installCTA && window.installCTA();
+    if (!window.installCTA) {
+        window.CTACallImitation && window.CTACallImitation();
+    } else {
+        window.installCTA();
+    }
 };
