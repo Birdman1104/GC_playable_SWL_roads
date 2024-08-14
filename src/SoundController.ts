@@ -32,7 +32,7 @@ class SoundControl {
         this.sounds.build = new Howl({ src: BUILD });
         this.sounds.click = new Howl({ src: CLICK });
         this.sounds.coins = new Howl({ src: COINS_DECREASE });
-        this.sounds.theme = new Howl({ src: THEME, loop: true, volume: 0.5 });
+        this.sounds.theme = new Howl({ src: THEME, loop: true, volume: 0.3 });
     }
 
     private onProgressBarUpdate(value: number): void {
