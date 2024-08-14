@@ -90,6 +90,8 @@ export class BoardView extends Container {
         this.bkg?.destroy();
 
         this.bkg = makeSprite({ texture: Images['game/bkg'] });
+        this.bkg.interactive = true;
+        this.bkg.on('pointerdown', () => lego.event.emit(BoardEvents.BkgPointerDown));
         this.bkg.y = 28;
         this.addChild(this.bkg);
     }

@@ -2,7 +2,7 @@ import anime from 'animejs';
 import { Container, Graphics, Point, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { BAR_MAX, BarType } from '../configs/constants';
-import { makeSprite } from '../utils';
+import { delayRunnable, makeSprite } from '../utils';
 
 const BAR_TINT = [
     0xff0000, // 0 points +
@@ -30,6 +30,16 @@ export class ProgressBar extends Container {
     }
 
     public updateValue(value: number): void {
+        if (value === 1) {
+            delayRunnable(0.7, () => {
+                this.animateValue(value);
+            });
+        } else {
+            this.animateValue(value);
+        }
+    }
+
+    private animateValue(value: number): void {
         this.value = Math.min(value, BAR_MAX);
         const newWidth = this.progressBar.width * (this.value / BAR_MAX);
         this.progressBar.tint = BAR_TINT[this.value];

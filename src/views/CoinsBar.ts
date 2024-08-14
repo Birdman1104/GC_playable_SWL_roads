@@ -3,7 +3,7 @@ import anime from 'animejs';
 import { Container, Point, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { BoardModelEvents } from '../events/ModelEvents';
-import { fitText, makeSprite } from '../utils';
+import { delayRunnable, fitText, makeSprite } from '../utils';
 
 export class CoinsBar extends Container {
     private icon: Sprite;
@@ -13,7 +13,7 @@ export class CoinsBar extends Container {
     constructor() {
         super();
 
-        lego.event.on(BoardModelEvents.CoinsUpdate, this.onCoinsUpdate, this)
+        lego.event.on(BoardModelEvents.CoinsUpdate, this.onCoinsUpdate, this);
         this.build();
     }
 
@@ -26,26 +26,28 @@ export class CoinsBar extends Container {
         this.coinsText = new Text('1000', { fontSize: 28, fill: 0xffffff });
         this.coinsText.anchor.set(0.5);
         this.coinsText.position.set(43, 20);
-        fitText(this.coinsText, 90, 45)
+        fitText(this.coinsText, 90, 45);
 
         this.addChild(this.bkg, this.coinsText, this.icon);
     }
 
     private onCoinsUpdate(value: number): void {
-        const scale = value < +this.coinsText.text ? 0.8 : 1.2
-        this.coinsText.text = `${value}`
-        fitText(this.coinsText, 90, 45)
-        anime({
-            targets: this.coinsText.scale,
-            x: scale,
-            y: scale,
-            duration: 100,
-            easing: 'easeInOutSine',
-            direction: 'alternate',
-            loop: 1,
-            complete: () => {
-                this.coinsText.scale.set(1)
-            }
-        })
+        delayRunnable(0.35, () => {
+            const scale = value < +this.coinsText.text ? 0.8 : 1.2;
+            this.coinsText.text = `${value}`;
+            fitText(this.coinsText, 90, 45);
+            anime({
+                targets: this.coinsText.scale,
+                x: scale,
+                y: scale,
+                duration: 100,
+                easing: 'easeInOutSine',
+                direction: 'alternate',
+                loop: 1,
+                complete: () => {
+                    this.coinsText.scale.set(1);
+                },
+            });
+        });
     }
 }

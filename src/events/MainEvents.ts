@@ -10,6 +10,7 @@ export const MainGameEvents = {
 
 export const BoardEvents = {
     HouseAnimationComplete: 'BoardEventsHouseAnimationComplete',
+    BkgPointerDown: 'BoardEventsBkgPointerDown',
 };
 
 export const TakeMe = {
