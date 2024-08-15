@@ -93,6 +93,8 @@ export class BoardView extends Container {
         this.bkg.interactive = true;
         this.bkg.on('pointerdown', () => lego.event.emit(BoardEvents.BkgPointerDown));
         this.bkg.y = 28;
+        const scale = 1857  / this.bkg.width ;
+        this.bkg.scale.set(scale);
         this.addChild(this.bkg);
     }
 }
