@@ -89,7 +89,7 @@ class SoundControl {
     private mute(muted: boolean): void {
         for (const [key, value] of Object.entries(this.sounds)) {
             // @ts-ignore
-            value.volume(muted ? 0 : 1);
+            value.volume(muted ? 0 : key === 'theme' ? 0.3 : 1);
         }
     }
 }

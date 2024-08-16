@@ -57,6 +57,10 @@ class App extends Application {
         this.muteSound(!focus);
     }
 
+    public onVisibilityChange(): void {
+        this.muteSound(document.visibilityState !== 'visible');
+    }
+
     public muteSound(value: boolean): void {
         lego.event.emit('muteSound', value);
     }
