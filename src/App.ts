@@ -54,6 +54,11 @@ class App extends Application {
 
     public onFocusChange(focus: boolean): void {
         lego.event.emit(WindowEvent.FocusChange, focus);
+        this.muteSound(!focus);
+    }
+
+    public muteSound(value: boolean): void {
+        lego.event.emit('muteSound', value);
     }
 
     private async loadAssets(): Promise<void> {

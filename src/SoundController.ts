@@ -15,6 +15,7 @@ class SoundControl {
     private sounds: any;
     public constructor() {
         lego.event
+            .on('muteSound', this.mute, this)
             .on(BoardEvents.BkgPointerDown, this.playClick, this)
             .on(BottomBarEvents.ButtonClicked, this.playClick, this)
             .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this)
@@ -82,6 +83,14 @@ class SoundControl {
 
     private playTheme(): void {
         this.sounds.theme.play();
+    }
+
+
+    private mute(muted: boolean): void {
+        for (const [key, value] of Object.entries(this.sounds)) {
+            // @ts-ignore
+            value.volume(muted ? 0 : 1);
+        }
     }
 }
 
